@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Al Saqib Premium Store</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@449;900&family=Poppins:wght@400;449&family=Amiri:wght@449&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    
+    <style>
+        :root { --gold: #d4af37; --brown: #2c1e14; --black: #000; --light-gold: #f1d592; }
+        body { font-family: 'Poppins', sans-serif; margin: 0; background: var(--brown); color: #fff; overflow-x: hidden; }
+
+        .badge { position: absolute; top: 10px; left: 10px; background: #ff4757; color: white; padding: 6px 12px; font-size: 0.85rem; font-weight: bold; border-radius: 5px; z-index: 10; box-shadow: 0 2px 8px rgba(0,0,0,0.6); }
+        .old-price { text-decoration: line-through; color: #888; font-size: 0.75rem; margin-right: 5px; }
+        .offer-price { color: var(--gold); font-weight: bold; font-size: 0.9rem; }
+
+        /* Mobile ke liye khas adjustments */
+@media (max-width: 600px) {
+    .card {
+    background: #000;
+    border: 1px solid #d4af37;
+    border-radius: 12px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    /* Sab cards ki height aik jaisi rakhne ke liye */
+    height: 420px; 
+    justify-content: space-between; /* Content ko upar niche barabar phailaye ga */
+    overflow: hidden;
+}
+
+/* Attar options ko compact (chota) karne ke liye */
+.price-options {
+    margin: 5px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px; /* Lines ke darmiyan fasla kam */
+}
+
+.custom-check {
+    font-size: 0.7rem !important; /* Font chota karein */
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 2px 0;
+}
+
+.custom-check input {
+    margin-right: 5px;
+    transform: scale(0.8); /* Radio button thora chota */
+}
+
+    /* 3. Navigation buttons ko sahi se set karo */
+    .nav-bar {
+        gap: 5px;
+        padding: 10px 5px;
+    }
+
+    .nav-btn {
+        padding: 6px 10px;
+        font-size: 0.65rem; /* Buttons chote taake screen par poore aayein */
+        flex: 1 1 auto; /* Barabar jagah lein */
+    }
+
+    /* 4. Price text aur Buttons chote karo */
+    .old-price { font-size: 0.6rem; }
+    .offer-price { font-size: 0.75rem; }
+    
+    .add-btn, .details-btn {
+        padding: 8px 5px;
+        font-size: 0.65rem;
+    }
+
+    /* 5. Modal (Popup) ko mobile par full screen karo */
+    .modal-content {
+        width: 95% !important;
+        padding: 15px;
+    }
+
+    /* 6. Invoice table ko readable banao */
+    #cart-list div {
+        font-size: 0.65rem !important;
+    }
+}
+
+        /* HEADER */
+        .header-container { background: #000; padding: 20px; border-bottom: 2px solid var(--gold); display: flex; transition: 0.5s; }
+        .header-front { flex-direction: column; align-items: center; text-align: center; padding: 60px 20px; }
+        .header-inner { flex-direction: row; align-items: center; justify-content: space-between; padding: 10px 30px; }
+        .header-inner .main-logo { max-height: 60px; margin-right: auto; }
+        .header-inner .text-container { flex-grow: 1; text-align: center; margin-right: 60px; }
+        .header-inner .brand-name { font-size: 1.5rem; display: block; width: 100%; }
+        .main-logo { transition: 0.5s; max-height: 200px; }
+        .brand-name { font-family: 'Cinzel'; color: var(--gold); font-size: clamp(2rem); margin: 0; }
+        .abad-text { font-family:Arial, Helvetica, sans-serif; color: #fff; font-size: 1rem; margin-top: 5px; }
+
+        /* NAVIGATION */
+        /* Navigation bar ko sahi se center karne ke liye */
+.nav-bar {
+    background: #111;
+    display: flex;
+    justify-content: center; /* Bilkul beech mein rakhega */
+    align-items: center;
+    gap: 8px; /* Buttons ke darmiyan barabar jagah */
+    padding: 12px 5px;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    border-bottom: 2px solid var(--gold);
+    flex-wrap: wrap; /* Mobile par buttons ko bikhre bagair adjust karega */
+}
+
+/* Button ki styling aur ubharne wali animation */
+.nav-btn {
+    background: #000;
+    color: var(--gold);
+    border: 1px solid var(--gold);
+    padding: 8px 14px;
+    cursor: pointer;
+    font-weight: bold;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Smooth springy effect */
+    text-transform: uppercase;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+}
+
+/* Jab cursor pas jaye to ye magic hoga */
+.nav-btn:hover {
+    transform: scale(1.15) translateY(-5px); /* Button 15% bada hoga aur upar uthega */
+    background: var(--gold);
+    color: #000;
+    box-shadow: 0 10px 25px rgba(212, 175, 55, 0.6); /* Neeche shadow aayegi jo ise ubharegi */
+    z-index: 100; /* Baqi buttons ke upar nazar aayega */
+    border-color: #fff;
+}
+
+/* Click karne par halka sa dabne ka effect */
+.nav-btn:active {
+    transform: scale(0.95);
+}
+
+        /* WELCOME BOX */
+        .welcome-box { min-height: 60vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 40px 20px; }
+        .royal-line { width: 95%; max-width: 900px; height: 6px; background: linear-gradient(90deg, transparent, var(--gold), var(--light-gold), var(--gold), transparent); margin: 25px 0; box-shadow: 0 0 15px var(--gold); }
+        .embossed-text { font-family:'Lucida Sans', sans-serif; font-size: clamp(1.4rem, 6vw, 3.5rem); color: var(--gold); text-transform: uppercase; font-weight: 900; letter-spacing: 5px; text-shadow: 2px 2px 4px #000; line-height: 1.2; margin: 0; }
+
+        /* PRODUCT GRID */
+        .product-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; padding: 20px; max-width: 1200px; margin: auto; }
+        .offer-grid { grid-template-columns: repeat(2, 1fr) !important; max-width: 800px; }
+        @media (max-width: 900px) { .product-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; } }
+
+        /* CARD */
+        .card { background: #111; border: 1px solid #444; padding: 15px; border-radius: 15px; text-align: center; display: flex; flex-direction: column; align-items: center; transition: 0.4s; position: relative; }
+        .card:hover { border-color: var(--gold); transform: translateY(-5px); }
+        /* Base Heart Icon */
+.like-icon { 
+    position: absolute; 
+    top: 15px; 
+    right: 15px; 
+    z-index: 5; 
+    font-size: 1.5rem; /* Thora bada size taake outline saaf dikhe */
+    color: transparent; /* Default mein khali rakhein */
+    -webkit-text-stroke: 1px #d4af37; /* Gold outline default mein */
+    cursor: pointer; 
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+}
+
+/* Hover Effect */
+.like-icon:hover {
+    transform: scale(1.3);
+    -webkit-text-stroke: 1px #fff; /* Hover par white outline */
+}
+
+/* Jab Liked ho jaye (Gold Color + Black Outline) */
+.like-icon.liked { 
+    color: #d4af37 !important; /* Gold filling */
+    -webkit-text-stroke: 1.5px #000; /* Black moti outline */
+    animation: goldPulse 0.6s ease-in-out; 
+    filter: drop-shadow(0 0 5px rgba(212, 175, 55, 0.4));
+}
+
+/* Click karne par ubharne wali animation */
+@keyframes goldPulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.5); }
+    100% { transform: scale(1.1); }
+}
+
+.img-container { width: 100%; aspect-ratio: 1 / 1; background: #000; border-radius: 8px; overflow: hidden; display: flex; align-items: center; justify-content: center; margin-bottom: 15px; border: 1px solid var(--gold); cursor: pointer; }
+        .img-container img { width: 100%; height: 100%; object-fit: cover; }
+        /* Add to Cart aur View Details dono ke liye base animation settings */
+.add-btn, .details-btn {
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Smooth springy effect */
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Hover Effect: Jab cursor button par jaye */
+.add-btn:hover, .details-btn:hover {
+    transform: scale(1.08); /* Button 8% bada ho jayega */
+    filter: brightness(1.2); /* Rang thora aur roshan/enhance ho jayega */
+    box-shadow: 0 8px 20px rgba(212, 175, 55, 0.4); /* Gold shadow mazeed barh jayegi */
+    z-index: 10; /* Button sabse upar nazar aayega */
+}
+
+/* Click Effect: Jab button dabaya jaye */
+.add-btn:active, .details-btn:active {
+    transform: scale(0.95); /* Dabne par thora chota hoga */
+}
+
+/* Add to Cart button par halki si chamak (Sheen effect) */
+.add-btn::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: rgba(255, 255, 255, 0.1);
+    transform: rotate(45deg);
+    transition: 0.5s;
+    pointer-events: none;
+}
+
+.add-btn:hover::after {
+    left: 120%; /* Hover karne par light guzarne ka effect aayega */
+}
+
+.badge-new { 
+    background: linear-gradient(135deg, #d4af37 0%, #f1d592 50%, #b38f1d 100%); 
+    color: #000; 
+    font-weight: 900; 
+    padding: 5px 10px; 
+    position: absolute; 
+    top: 12px; 
+    left: 12px; 
+    border-radius: 4px; 
+    font-size: 0.7rem; 
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    z-index: 20;
+
+    /* Embossed (Ubhra hua) Effect */
+    box-shadow: 
+        2px 2px 5px rgba(0,0,0,0.5), 
+        inset 1px 1px 1px rgba(255,255,255,0.8), 
+        inset -1px -1px 1px rgba(0,0,0,0.4);
+    
+    border: 1px solid #8a6d1c;
+    text-shadow: 0.5px 0.5px 0px rgba(255,255,255,0.3); /* Text par bhi halka sa effect */
+    
+    animation: shine 3s infinite;
+}
+
+/* Chamakne wala effect (Glow) */
+@keyframes shine {
+    0% { filter: brightness(1); }
+    50% { filter: brightness(1.3); transform: scale(1.05); }
+    100% { filter: brightness(1); }
+}
+        
+        h4 { font-size: 0.9rem; margin: 10px 0; color: var(--light-gold); font-family: 'Cinzel'; height: 40px; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+        
+        .price-options { text-align: center; margin: 5px auto; width: 100%; display: flex; flex-direction: column; align-items: center; gap: 5px; }
+        .custom-check { display: flex; align-items: center; justify-content: center; gap: 8px; cursor:pointer; font-size: 0.8rem; color: #eee; width: fit-content; }
+        
+        .add-btn { background: linear-gradient(135deg, var(--gold), #b38f1d); color: #000; border: none; padding: 10px; font-weight: 900; font-size: 0.8rem; cursor: pointer; border-radius: 8px; width: 100%; text-transform: uppercase; margin-top: 10px; }
+        .details-btn { background: transparent; color: var(--gold); border: 1px solid var(--gold); padding: 5px; font-size: 0.7rem; border-radius: 5px; margin-top: 5px; cursor: pointer; width: 100%; }
+
+        /* MODAL */
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 6000; align-items: center; justify-content: center; }
+        .modal-content { background: #111; border: 1px solid var(--gold); width: 90%; max-width: 500px; padding: 25px; border-radius: 15px; position: relative; text-align: center; max-height: 90vh; overflow-y: auto; }
+        .modal-img { width: 100%; max-width: 320px; border-radius: 10px; border: 1px solid var(--gold); margin-bottom: 15px; }
+        
+        .fragrance-list { text-align: left; background: #222; padding: 10px; border-radius: 8px; margin: 15px 0; border: 1px solid #444; max-height: 250px; overflow-y: auto; }
+        .frag-item { padding: 10px; border-bottom: 1px solid #333; font-size: 0.85rem; transition: 0.3s; }
+        .frag-item:last-child { border-bottom: none; }
+        .frag-item.disabled { color: #555 !important; opacity: 0.6; }
+        .frag-item input { accent-color: var(--gold); cursor: pointer; width: 18px; height: 18px; margin-left: 10px; }
+
+        /* DISCOUNT BANNER */
+        #discountBanner { 
+            display: none; 
+            background: linear-gradient(45deg, #d4af37, #f1d592); 
+            color: #000; 
+            font-weight: 900; 
+            padding: 10px; 
+            border-radius: 8px; 
+            margin: 10px 0; 
+            font-family: 'Cinzel'; 
+            text-shadow: 1px 1px 2px rgba(255,255,255,0.5);
+            animation: pulse 1.5s infinite;
+        }
+        @keyframes pulse { 0% {transform: scale(1);} 50% {transform: scale(1.05);} 100% {transform: scale(1);} }
+
+        /* SIDEBAR */
+        .cart-sidebar { position: fixed; right: -350px; top: 0; width: 320px; height: 100%; background: #000; z-index: 2000; transition: 0.4s; padding: 20px; border-left: 2px solid var(--gold); overflow-y: auto; box-sizing: border-box; }
+        .cart-sidebar.open { right: 0; }
+        .input-field { width: 100%; padding: 10px; margin: 5px 0; background: #222; border: 1px solid var(--gold); color: #fff; border-radius: 6px; box-sizing: border-box; font-size: 0.8rem; }
+
+        #thankYouOverlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 7990; align-items: center; justify-content: center; }
+    </style>
+</head>
+<body>
+
+    <div id="detailsModal" class="modal-overlay">
+        <div class="modal-content" id="modal-content"></div>
+    </div>
+
+    <div id="thankYouOverlay">
+        <div style="background: #111; border: 2px solid var(--gold); padding: 30px; border-radius: 20px; text-align: center;">
+            <h2 style="font-family:'Cinzel'; color:var(--gold);">THANK YOU!</h2>
+            <p>Order placed successfully.</p>
+            <div style="font-family:'Amiri'; font-size:1.8rem; color:var(--gold); margin:15px 0;">جَزَاكَ اللَّهُ خَيْرًا</div>
+            <button class="nav-btn" onclick="closeThankYou()">CLOSE STORE</button>
+        </div>
+    </div>
+
+    <header id="mainHeader" class="header-container header-front">
+        <img src="images/l.png" alt="Logo" class="main-logo">
+        <div class="text-container">
+            <h1 class="brand-name">AL SAQIB ATTAR & PERFUMES</h1>
+            <div class="abad-text">Our Impression Long Lasting Fragrances</div>
+        </div>
+    </header>
+
+    <nav class="nav-bar">
+        <button onclick="showSection('home')" class="nav-btn">HOME</button>
+        <button onclick="showSection('exclusive')" class="nav-btn" style="color:#fff; border-color:#fff;">🌙 OFFERS</button>
+        <button onclick="showSection('attars')" class="nav-btn">ATTARS</button>
+        <button onclick="showSection('perfumes')" class="nav-btn">PERFUMES</button>
+        <button onclick="showSection('pocket')" class="nav-btn">POCKET</button>
+        <button onclick="showSection('liked')" class="nav-btn"><i class="fas fa-heart"></i> LIKED</button>
+        <button onclick="toggleCart()" class="nav-btn"><i class="fas fa-shopping-cart"></i> (<span id="cart-count">0</span>)</button>
+    </nav>
+
+    <div id="home" class="content-section">
+        <div class="welcome-box">
+            <div class="royal-line"></div>
+            <h2 class="embossed-text">Welcome To STORE</h2>
+            <div class="royal-line"></div>
+        </div>
+    </div>
+
+    <div id="exclusive" class="content-section" style="display:none;">
+        <h2 style="text-align:center; color:var(--gold); font-family:'Cinzel'; padding-top:20px;">🌙 RAMADAN EXCLUSIVE OFFERS</h2>
+        <div class="product-grid offer-grid" id="exclusive-grid"></div>
+    </div>
+
+    <div id="attars" class="content-section" style="display:none;">
+        <h2 style="text-align:center; color:var(--gold); font-family:'Cinzel'; padding-top:20px;">ATTAR COLLECTION</h2>
+        <div class="product-grid" id="attar-grid"></div>
+    </div>
+
+    <div id="perfumes" class="content-section" style="display:none;">
+        <h2 style="text-align:center; color:var(--gold); font-family:'Cinzel'; padding-top:20px;">LUXURY PERFUMES</h2>
+        <div class="product-grid" id="perfume-grid"></div>
+    </div>
+
+    <div id="pocket" class="content-section" style="display:none;">
+        <h2 style="text-align:center; color:var(--gold); font-family:'Cinzel'; padding-top:20px;">POCKET SPRAYS</h2>
+        <div class="product-grid" id="pocket-grid"></div>
+    </div>
+
+    <div id="liked" class="content-section" style="display:none;">
+        <h2 style="text-align:center; color:var(--gold); font-family:'Cinzel'; padding-top:20px;">YOUR LIKED ITEMS</h2>
+        <div class="product-grid" id="liked-grid"></div>
+        <p id="liked-empty" style="text-align:center; color:#666; margin-top:50px;">No items liked yet.</p>
+    </div>
+
+    <div id="cartSidebar" class="cart-sidebar">
+        <h2 style="color:var(--gold); font-family:'Cinzel';">Your Cart</h2>
+        <div id="cart-list"></div>
+        <div style="border-top:1px solid #333; padding-top:10px; margin-top:10px;">
+            <p style="font-size:0.9rem;">🛵 Delivery: <span id="dc-amount">Rs. 299</span></p>
+            <p id="free-note" style="color:var(--gold); font-size:0.7rem;"></p>
+            <p style="font-size:1.1rem; font-weight:bold;">Total: <span id="total-price" style="color:var(--gold)">Rs. 0</span></p>
+        </div>
+        <input type="text" id="custName" class="input-field" placeholder="Full Name">
+        <input type="tel" id="custWhatsApp" class="input-field" placeholder="WhatsApp Number">
+        <textarea id="custAddress" class="input-field" placeholder="Full Address"></textarea>
+        <button class="add-btn" style="background:#25d366; color:white; margin-top:10px;" onclick="checkoutWhatsApp()">ORDER ON WHATSAPP</button>
+        <button class="nav-btn" style="width:100%; margin-top:10px;" onclick="toggleCart()">CLOSE</button>
+    </div>
+
+    <script>
+    let cart = [];
+    let likedIds = [];
+    let freebieTriggered = false;
+
+    const products = [
+        {id:1, name:"White Oud BY AL SAQIB", img:"images/attar.jpeg", type:"attar", p3:299, p6:449, p12:999, old3:349, old6:549, old12:1099, cat:"premium"},
+        {id:2, name:"MARJ BY BY AL SAQIB", img:"images/attar.jpeg", type:"attar", p3:299, p6:449, p12:999, old3:349, old6:549, old12:1099, cat:"premium"},
+        {id:3, name:"SUPREME OUD BY AL SAQIB", img:"images/attar.jpeg", type:"attar", p3:299, p6:449, p12:999, old3:349, old6:549, old12:1099, cat:"premium"},
+        {id:4, name:"DUNHILL DESIRE BY AL SAQIB", img:"images/attar.jpeg", type:"attar", p3:249, p6:399, p12:749, old3:299, old6:499, old12:849, cat:"regular"},
+        {id:5, name:"DIRHAM BY AL SAQIB", img:"images/attar.jpeg", type:"attar",p3:249, p6:399, p12:749, old3:299, old6:499, old12:849, cat:"regular"},
+        {id:6, name:"FRESH ROSE BY SAQIB", img:"images/attar.jpeg", type:"attar",p3:249, p6:399, p12:749, old3:299, old6:499, old12:849, cat:"regular"},
+        {id:7, name:"BLUE SEA BY AL SAQIB", img:"images/attar.jpeg", type:"attar",p3:249, p6:399, p12:749, old3:299, old6:499, old12:849, cat:"regular"},
+        {id:8, name:"BAKHOR BY AL SAQIB", img:"images/attar.jpeg", type:"attar",p3:249, p6:399, p12:749, old3:299, old6:499, old12:849, cat:"regular"},
+        {id:9, name:"BRUTE BY AL SAQIB", img:"images/attar.jpeg", type:"attar",p3:249, p6:399, p12:749, old3:299, old6:499, old12:849, cat:"regular"},
+
+        {id:10, name:"MARJ BY AL SAQIB", img:"images/a.png", type:"perfume", p:799, oldP:999},
+        {id:11, name:"BLUE SEA BY AL SAQIB", img:"images/b.png", type:"perfume", p:799, oldP:999},
+        {id:12, name:"ERBA PURA BY AL SAQIB", img:"images/c.png", type:"perfume", p:799, oldP:999},
+        {id:13, name:"SUPREME OUD BY AL SAQIB", img:"images/d.png", type:"perfume", p:799, oldP:999},
+        {id:14, name:"DUNHILL DESIRE BY AL SAQIB", img:"images/a.png", type:"perfume", p:799, oldP:999},
+        {id:15, name:"GUCCI FLORA BY AL SAQIB", img:"images/c.png", type:"perfume", p:799, oldP:999},
+        {id:16, name:"FRESH ROSE BY AL SAQIB", img:"images/c.png", type:"perfume", p:799, oldP:999},
+        {id:17, name:"OAKLEY SPORTS BY AL SAQIB", img:"images/d.png", type:"perfume", p:799, oldP:999},
+        {id:12, name:"EVERYONE BY AL SAQIB", img:"images/c.png", type:"perfume", p:799, oldP:999},
+        {id:18, name:"BAKHOR BY AL SAQIB", img:"images/a.png", type:"perfume", p:799, oldP:999},
+
+        {id:19, name:"POCKET MARJ BY AL SAQIB", img:"images/U.jpg", type:"pocket", p:299, oldP:349},
+        {id:20, name:"POCKET BLUE SEA BY AL SAQIB", img:"images/T.jpg", type:"pocket", p:299, oldP:349},
+        {id:21, name:"POCKET ERBA PURA BY AL SAQIB", img:"images/S.jpg", type:"pocket", p:299, oldP:349},
+        {id:22, name:"POCKET SUPREME OUD BY AL SAQIB", img:"images/U.jpg", type:"pocket", p:299, oldP:349},
+        {id:23, name:"POCKET DUNHILL DESIRE BY AL SAQIB", img:"images/U.jpg", type:"pocket", p:299, oldP:349},
+        {id:24, name:"POCKET GUCCI FLORA BY AL SAQIB", img:"images/S.jpg", type:"pocket", p:299, oldP:349},
+        {id:25, name:"POCKET FRESH ROSE BY AL SAQIB", img:"images/S.jpg", type:"pocket", p:299, oldP:349},
+        {id:26, name:"POCKET OAKLEY SPORTS BY AL SAQIB", img:"images/U.jpg", type:"pocket", p:299, oldP:349},
+        {id:21, name:"POCKET EVERYONE BY AL SAQIB", img:"images/U.jpg", type:"pocket", p:299, oldP:349},
+        {id:27, name:"POCKET BAKHOR BY AL SAQIB", img:"images/U.jpg", type:"pocket", p:299, oldP:349},
+        {id:101, name:"RAMADAN OFFER: (3) 3ML", img:"images/2.png", type:"exclusive", size:"3ml"},
+        {id:102, name:"RAMADAN OFFER: (3) 6ML", img:"images/2.png", type:"exclusive", size:"6ml"},
+        {id:103, name:"RAMADAN OFFER: (3) 12ML", img:"images/2.png", type:"exclusive", size:"12ml"},
+    ];
+
+    const fragranceList = [
+        {name: "White Oud", cat: "premium"}, {name: "Marj", cat: "premium"}, {name: "Supreme Oud", cat: "premium"},
+        {name: "Dunhill Desire", cat: "regular"}, {name: "Dirham", cat: "regular"}, {name: "Fresh Rose", cat: "regular"},
+        {name: "Blue Sea", cat: "regular"}, {name: "Bakhor", cat: "regular"}, {name: "Brute", cat: "regular"}
+    ];
+
+    function showNotify(msg) {
+        let n = document.createElement('div');
+        n.style.cssText = "position:fixed; top:20px; right:20px; background:linear-gradient(145deg, #1a1a1a, #000); color:#d4af37; padding:15px 25px; border:1px solid #d4af37; border-radius:8px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); z-index:10000; font-family:'Cinzel', serif; animation: slideIn 0.5s ease-out; font-size:0.8rem; border-left:5px solid #d4af37;";
+        n.innerHTML = `<i class="fas fa-shopping-cart"></i> ${msg}`;
+        document.body.appendChild(n);
+        setTimeout(() => n.remove(), 3000);
+    }
+
+    function createCard(p) {
+        const isLiked = likedIds.includes(p.id) ? 'liked' : '';
+        let options = "";
+        let badge = (p.type === 'exclusive') ? `<div class="badge-new">15% OFF</div>` : "";
+
+        if(p.type === 'attar') {
+            options = `<div class="price-options">
+                <label class="custom-check"><input type="radio" name="opt-${p.id}" id="s3-${p.id}" checked> 3ml - Rs.${p.p3}</label>
+                <label class="custom-check"><input type="radio" name="opt-${p.id}" id="s6-${p.id}"> 6ml - Rs.${p.p6}</label>
+                <label class="custom-check"><input type="radio" name="opt-${p.id}" id="s12-${p.id}"> 12ml - Rs.${p.p12}</label>
+            </div>`;
+        } else if(p.type === 'exclusive') {
+            options = `<p style="color:#d4af37; font-size:0.75rem; margin:10px 0;">Premium & Regular Mix allowed</p>`;
+        } else {
+            options = `<p class="offer-price">Rs.${p.p}</p>`;
+        }
+
+        return `
+        <style>
+            .badge-new { background: linear-gradient(135deg, #d4af37, #aa8930); color:#000; font-weight:bold; padding:4px 8px; position:absolute; top:10px; left:10px; border-radius:3px; font-size:0.65rem; box-shadow: 2px 2px 5px rgba(0,0,0,0.3); animation: pulse 2s infinite; border: 1px solid #f1d592; z-index:5;}
+            @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
+            @keyframes slideIn { from { transform: translateX(100%); opacity:0; } to { transform: translateX(0); opacity:1; } }
+        </style>
+        <div class="card">
+            ${badge}
+            <i class="fas fa-heart like-icon ${isLiked}" onclick="toggleLike(${p.id})"></i>
+            <div class="img-container" onclick="showDetails(${p.id})"><img src="${p.img}"></div>
+            <h4>${p.name}</h4>
+            ${options}
+            <button class="add-btn" onclick="${p.type==='exclusive' ? `showDetails(${p.id})` : `addFromCard(${p.id})`}">
+                ${p.type === 'exclusive' ? 'SELECT FRAGRANCES' : 'ADD TO CART'}
+            </button>
+            <button class="details-btn" onclick="showDetails(${p.id})">VIEW DETAILS</button>
+        </div>`;
+    }
+
+    function addFromCard(id) {
+        const p = products.find(x => x.id === id);
+        let price, size;
+        if(p.type === 'attar') {
+            if(document.getElementById(`s3-${id}`).checked) { price = p.p3; size = '3ml'; }
+            else if(document.getElementById(`s6-${id}`).checked) { price = p.p6; size = '6ml'; }
+            else { price = p.p12; size = '12ml'; }
+        } else { price = p.p; size = p.type==='perfume'?'30ml':'10ml'; }
+        
+        cart.push({name: p.name, price: price, size: size});
+        updateCart();
+        showNotify(`${p.name} added to cart!`);
+    }
+function showDetails(id) {
+    const p = products.find(x => x.id === id);
+    const content = document.getElementById('modal-content');
+    
+    // Description texts
+    let desc = "Premium quality long-lasting fragrance inspired by high-end luxury brands. Skin friendly and highly concentrated.";
+    if(p.type === 'attar') desc = "Pure concentrated perfume oil (Non-Alcoholic). Intense and long-lasting aroma that stays for hours.";
+    if(p.type === 'exclusive') desc = "Our special Ramadan Bundle! Mix and match your favorite scents and enjoy a massive 15% discount.";
+
+    // Red Warning Note - ONLY for Perfumes (NOT for Pocket)
+    let bottleNote = (p.type === 'perfume') ? 
+        `<p style="color:#ff4d4d; font-size:0.85rem; font-weight:bold; margin-top:12px; text-align:center; padding: 0 10px;">
+            <i class="fas fa-exclamation-circle"></i> NOTE: Bottle color and design may vary based on stock availability.
+        </p>` : "";
+
+    let selectionHTML = "";
+    if(p.type === 'exclusive') {
+        selectionHTML = `
+            <div id="offerBanner" style="background:#d4af37; color:#000; padding:8px; font-weight:bold; font-size:0.9rem; margin-top:15px; display:none; text-align:center; border-radius:4px; text-transform:uppercase;">YOUR 15% DISCOUNT APPLIED!</div>
+            <p style="color:#d4af37; font-weight:bold; margin:20px 0 10px; font-size:1.1rem; text-align:center;">Select ANY 3 Fragrances (${p.size}):</p>
+            <div class="fragrance-list" style="max-height:250px; overflow-y:auto; border:1px solid #444; padding:8px; border-radius:8px; background: #0a0a0a;">
+                ${fragranceList.map(f => {
+                    let price = (p.size==='3ml') ? (f.cat==='premium'?299:249) : (p.size==='6ml' ? (f.cat==='premium'?449:399) : (f.cat==='premium'?999:749));
+                    return `<div style="display:flex; justify-content:space-between; align-items:center; padding:12px; border-bottom:1px solid #222;">
+                        <span style="font-size:1rem; color:#fff;">${f.name} <br><small style="color:#d4af37; font-weight:bold;">Rs.${price}</small></span>
+                        <input type="checkbox" style="transform: scale(1.5); accent-color:#d4af37;" class="offer-check" data-price="${price}" value="${f.name}" onchange="handleSelection()">
+                    </div>`
+                }).join('')}
+            </div>
+            <div id="price-preview" style="margin:20px 0; font-weight:bold; text-align:center; color:#d4af37; font-size:1.3rem; border:1px dashed #d4af37; padding:10px;"></div>
+        `;
+    } else if(p.type === 'attar') {
+        selectionHTML = `
+            <div style="text-align:center; margin:25px 0;">
+                <label class="custom-check" style="font-size:1.1rem; margin-bottom:10px;"><input type="radio" name="m-opt" id="ms3" checked> 3ml (Rs.${p.p3})</label><br>
+                <label class="custom-check" style="font-size:1.1rem; margin-bottom:10px;"><input type="radio" name="m-opt" id="ms6"> 6ml (Rs.${p.p6})</label><br>
+                <label class="custom-check" style="font-size:1.1rem;"><input type="radio" name="m-opt" id="ms12"> 12ml (Rs.${p.p12})</label>
+            </div>`;
+    } else {
+        selectionHTML = `<p style="color:#d4af37; font-weight:bold; font-size:1.5rem; text-align:center; margin:20px 0; border-top:1px solid #333; padding-top:15px;">Price: Rs.${p.p}</p>`;
+    }
+
+    content.innerHTML = `
+        <span style="float:right; cursor:pointer; color:#d4af37; font-size:2.2rem; font-weight:bold; line-height:1;" onclick="closeModal()">&times;</span>
+        <div style="width:100%; text-align:center;">
+            <img src="${p.img}" class="modal-img" style="width:200px; height:200px; object-fit:contain; margin:0 auto; display:block; border-radius:15px; filter: drop-shadow(0 5px 15px rgba(212,175,55,0.3));">
+        </div>
+        <h2 style="color:#d4af37; text-align:center; font-family:'Cinzel'; font-size:1.6rem; margin:20px 0 10px; letter-spacing:1.5px; text-transform:uppercase; font-weight:900;">${p.name}</h2>
+        <p style="font-size:1rem; color:#ccc; text-align:center; padding:0 15px; line-height:1.5; font-style:italic;">${desc}</p>
+        ${bottleNote}
+        ${selectionHTML}
+        <button class="add-btn" style="width:100%; margin-top:20px; padding:15px; font-weight:bold; font-size:1.2rem; text-transform:uppercase; letter-spacing:1px; box-shadow: 0 4px 10px rgba(0,0,0,0.4);" onclick="modalAdd(${p.id})">
+            ${p.type === 'exclusive' ? 'CONFIRM & ADD BUNDLE' : 'ADD TO CART'}
+        </button>
+    `;
+    document.getElementById('detailsModal').style.display = 'flex';
+}
+
+    function handleSelection() {
+        const checked = document.querySelectorAll('.offer-check:checked');
+        const preview = document.getElementById('price-preview');
+        const banner = document.getElementById('offerBanner');
+        let total = 0;
+        checked.forEach(c => total += parseInt(c.dataset.price));
+        
+        if(checked.length === 3) {
+            let disc = Math.floor(total * 0.85);
+            banner.style.display = "block";
+            preview.innerHTML = `<span style="text-decoration:line-through; color:gray; font-size:0.8rem;">Rs.${total}</span> Rs.${disc}`;
+        } else {
+            banner.style.display = "none";
+            preview.innerHTML = `Selected: ${checked.length}/3 (Total: Rs.${total})`;
+        }
+    }
+function createCard(p) {
+    const isLiked = likedIds.includes(p.id) ? 'liked' : '';
+    let options = "";
+    let badge = (p.type === 'exclusive') ? `<div class="badge-new">15% OFF</div>` : "";
+
+    if(p.type === 'attar') {
+        // Yahan purani prices (old3, old6, old12) add ki hain
+        options = `<div class="price-options">
+            <label class="custom-check"><input type="radio" name="opt-${p.id}" id="s3-${p.id}" checked> 3ml - <span class="old-price">Rs.${p.old3}</span> <span class="offer-price">Rs.${p.p3}</span></label>
+            <label class="custom-check"><input type="radio" name="opt-${p.id}" id="s6-${p.id}"> 6ml - <span class="old-price">Rs.${p.old6}</span> <span class="offer-price">Rs.${p.p6}</span></label>
+            <label class="custom-check"><input type="radio" name="opt-${p.id}" id="s12-${p.id}"> 12ml - <span class="old-price">Rs.${p.old12}</span> <span class="offer-price">Rs.${p.p12}</span></label>
+        </div>`;
+    } else if(p.type === 'exclusive') {
+        options = `<p style="color:#d4af37; font-size:0.75rem; margin:10px 0;">Premium & Regular Mix allowed</p>`;
+    } else {
+        // Yahan Perfumes aur Pocket sprays ki purani price (oldP) add ki hai
+        options = `<p class="offer-price"><span class="old-price">Rs.${p.oldP}</span> Rs.${p.p}</p>`;
+    }
+
+    return `
+    <div class="card">
+        ${badge}
+        <i class="fas fa-heart like-icon ${isLiked}" onclick="toggleLike(${p.id})"></i>
+        <div class="img-container" onclick="showDetails(${p.id})"><img src="${p.img}"></div>
+        <h4>${p.name}</h4>
+        ${options}
+        <button class="add-btn" onclick="${p.type==='exclusive' ? `showDetails(${p.id})` : `addFromCard(${p.id})`}">
+            ${p.type === 'exclusive' ? 'SELECT FRAGRANCES' : 'ADD TO CART'}
+        </button>
+        <button class="details-btn" onclick="showDetails(${p.id})">VIEW DETAILS</button>
+    </div>`;
+}
+    function modalAdd(id) {
+        const p = products.find(x => x.id === id);
+        if(p.type === 'exclusive') {
+            const checked = document.querySelectorAll('.offer-check:checked');
+            if(checked.length !== 3) return alert("Please select exactly 3 fragrances!");
+            let total = 0; let names = [];
+            checked.forEach(c => { total += parseInt(c.dataset.price); names.push(c.value); });
+            cart.push({name: `Offer (${p.size}): ${names.join(', ')}`, price: Math.floor(total * 0.85), size: "Bundle"});
+        } else {
+            if(p.type === 'attar') {
+                if(document.getElementById('ms3').checked) document.getElementById(`s3-${id}`).checked = true;
+                if(document.getElementById('ms6').checked) document.getElementById(`s6-${id}`).checked = true;
+                if(document.getElementById('ms12').checked) document.getElementById(`s12-${id}`).checked = true;
+            }
+            addFromCard(id); closeModal(); return;
+        }
+        updateCart(); closeModal(); showNotify("Ramadan Offer added!");
+    }
+
+    function updateCart() {
+    document.getElementById('cart-count').innerText = cart.length;
+    let sub = cart.reduce((s,i) => s + i.price, 0);
+    
+    // Party Popper Logic - Ab ye 1999 par chalega
+    if (sub >= 1999 && !freebieTriggered) {
+        confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 }, colors: ['#d4af37', '#ffffff'] });
+        freebieTriggered = true;
+    } else if (sub < 1999) { 
+        freebieTriggered = false; 
+    }
+
+    // Delivery Charge Logic - 1999 se kam par 299 lagega
+    let dc = (sub >= 1999 || sub === 0) ? 0 : 299;
+    
+    document.getElementById('cart-list').innerHTML = cart.map((item, i) => `
+        <div style="display:flex; justify-content:space-between; font-size:0.7rem; margin-bottom:8px; background:#111; padding:8px; border-left:2px solid #d4af37;">
+            <span style="max-width:70%">${item.name}</span>
+            <span>Rs.${item.price} <i class="fas fa-trash" onclick="remove(${i})" style="color:red; cursor:pointer; margin-left:5px;"></i></span>
+        </div>`).join('');
+    
+    // Niche wali lines mein bhi limit update kar di gayi hai
+    document.getElementById('dc-amount').innerHTML = dc === 0 ? "<span style='color:#25d366'>FREE 🎉</span>" : "Rs. 299";
+    document.getElementById('free-note').innerText = (sub < 1999 && sub > 0) ? `Add Rs.${1999-sub} for FREE Delivery` : "Eligible for FREE Delivery!";
+    document.getElementById('total-price').innerText = "Rs. " + (sub + dc);
+}
+
+    function remove(i) { cart.splice(i,1); updateCart(); }
+    function toggleCart() { document.getElementById('cartSidebar').classList.toggle('open'); }
+    function closeModal() { document.getElementById('detailsModal').style.display = 'none'; }
+
+    function renderProducts() {
+        ['attar', 'perfume', 'pocket', 'exclusive'].forEach(type => {
+            const grid = document.getElementById(type + "-grid");
+            if(grid) {
+                grid.innerHTML = "";
+                products.filter(p => p.type === type).forEach(p => grid.innerHTML += createCard(p));
+            }
+        });
+    }
+
+ function checkoutWhatsApp() {
+    const n = document.getElementById('custName').value, 
+          w = document.getElementById('custWhatsApp').value, 
+          a = document.getElementById('custAddress').value;
+
+    if(!n || !w || !a || cart.length === 0) return alert("Please fill all details!");
+
+    // Order ka time aur date nikalne ke liye
+    const now = new Date();
+    const orderTime = now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+    const orderDate = now.toLocaleDateString();
+
+    // Bold Heading
+    let msg = `*AL SAQIB ATTAR AND PERFUME INVOICE*%0A%0A`;
+    
+    // Customer Details
+    msg += `*Customer:* ${n}%0A`;
+    msg += `*Number:* ${w}%0A`;
+    msg += `*Address:* ${a}%0A`;
+    msg += `*Date:* ${orderDate} | *Time:* ${orderTime}%0A%0A`;
+
+    // Table Header
+    msg += `*S.No | Item Name | ML | Price*%0A`;
+    msg += `------------------------------------%0A`;
+
+    // Items List
+    cart.forEach((item, index) => {
+        // Item detail format: 1. White Oud | 6ml | Rs.449
+        msg += `${index + 1}. ${item.name} | ${item.size} | Rs.${item.price}%0A`;
+    });
+
+    msg += `------------------------------------%0A`;
+
+    // Delivery and Total
+    let sub = cart.reduce((s,i) => s + i.price, 0);
+    let dcText = document.getElementById('dc-amount').innerText;
+    let total = document.getElementById('total-price').innerText;
+
+    msg += `*Sub-Total:* Rs.${sub}%0A`;
+    msg += `*Delivery:* ${dcText}%0A`;
+    msg += `*GRAND TOTAL:* ${total}%0A%0A`;
+    msg += `_Thank you for shopping with us!_`;
+
+    // WhatsApp link open karna
+    window.open(`https://wa.me/923353397893?text=${msg}`);
+    
+    // Order success overlay dikhana
+    document.getElementById('thankYouOverlay').style.display = 'flex';
+}
+
+    function toggleLike(id) {
+        likedIds.includes(id) ? likedIds = likedIds.filter(i => i !== id) : likedIds.push(id);
+        renderProducts();
+        renderLiked();
+    }
+
+    function renderLiked() {
+        const grid = document.getElementById('liked-grid');
+        const emptyMsg = document.getElementById('liked-empty');
+        grid.innerHTML = "";
+        const likedItems = products.filter(p => likedIds.includes(p.id));
+        if (likedItems.length > 0) {
+            emptyMsg.style.display = 'none';
+            likedItems.forEach(p => grid.innerHTML += createCard(p));
+        } else { emptyMsg.style.display = 'block'; }
+    }
+
+    function showSection(id) {
+        document.querySelectorAll('.content-section').forEach(s => s.style.display = 'none');
+        document.getElementById(id).style.display = 'block';
+        document.getElementById('mainHeader').className = (id==='home') ? 'header-container header-front' : 'header-container header-inner';
+        window.scrollTo(0,0);
+    }
+
+    function closeThankYou() {
+        document.getElementById('thankYouOverlay').style.display = 'none';
+        cart = []; updateCart(); toggleCart(); showSection('home');
+    }
+
+    window.onload = renderProducts;
+</script>
+</body>
+</html>
