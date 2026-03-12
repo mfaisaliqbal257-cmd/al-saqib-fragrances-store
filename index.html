@@ -1,0 +1,958 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Al Saqib Premium Store</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@449;900&family=Poppins:wght@400;449&family=Amiri:wght@449&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    
+    <style>
+        /* Promo Message: Embossed Gold */
+#promo-msg {
+    font-size: 0.85rem;
+    margin: 5px 0;
+    font-weight: bold;
+    color: #d4af37;
+    /* Embossed Effect */
+    text-shadow: 1px 1px 0px rgba(255,255,255,0.2), -1px -1px 0px rgba(0,0,0,0.7);
+    display: none;
+    text-align: left;
+}
+
+/* Button Animation like Add to Cart */
+#promo-btn {
+    transition: transform 0.2s, background 0.2s;
+    cursor: pointer;
+}
+
+#promo-btn:active {
+    transform: scale(0.95);
+    background: #b8962d !important;
+}
+        :root { --gold: #d4af37; --brown: #2c1e14; --black: #000; --light-gold: #f1d592; }
+        body { font-family: 'Poppins', sans-serif; margin: 0; background: linear-gradient(135deg, #7a2f00, #3d1a00, #d4af37); color: #fff; overflow-x: hidden; }
+
+        .badge { position: absolute; top: 10px; left: 10px; background: #ff4757; color: white; padding: 6px 12px; font-size: 0.85rem; font-weight: bold; border-radius: 5px; z-index: 10; box-shadow: 0 2px 8px rgba(0,0,0,0.6); }
+        .old-price { text-decoration: line-through; color: #888; font-size: 0.75rem; margin-right: 5px; }
+        .offer-price { color: var(--gold); font-weight: bold; font-size: 0.9rem; }
+
+        /* Mobile ke liye khas adjustments */
+@media (max-width: 600px) {
+    .card {
+    background: #000;
+    border: 1px solid #d4af37;
+    border-radius: 12px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    /* Sab cards ki height aik jaisi rakhne ke liye */
+    height: 420px; 
+    justify-content: space-between; /* Content ko upar niche barabar phailaye ga */
+    overflow: hidden;
+}
+
+/* Attar options ko compact (chota) karne ke liye */
+.price-options {
+    margin: 5px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px; /* Lines ke darmiyan fasla kam */
+}
+
+.custom-check {
+    font-size: 0.7rem !important; /* Font chota karein */
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 2px 0;
+}
+
+.custom-check input {
+    margin-right: 5px;
+    transform: scale(0.8); /* Radio button thora chota */
+}
+
+    /* 3. Navigation buttons ko sahi se set karo */
+    .nav-bar {
+        gap: 5px;
+        padding: 10px 5px;
+    }
+
+    .nav-btn {
+        padding: 6px 10px;
+        font-size: 0.65rem; /* Buttons chote taake screen par poore aayein */
+        flex: 1 1 auto; /* Barabar jagah lein */
+    }
+
+    /* 4. Price text aur Buttons chote karo */
+    .offer-price { font-size: 0.75rem; }
+    
+    .add-btn, .details-btn {
+        padding: 8px 5px;
+        font-size: 0.65rem;
+    }
+
+    /* 5. Modal (Popup) ko mobile par full screen karo */
+    .modal-content {
+        width: 95% !important;
+        padding: 15px;
+    }
+
+    /* 6. Invoice table ko readable banao */
+    #cart-list div {
+        font-size: 0.65rem !important;
+    }
+}
+
+       /* =========================
+   HEADER STYLES
+   ========================= */
+
+/* ---------- General Header Container ---------- */
+.header-container {
+    background: #000;                 /* Black background */
+    padding: 20px;                     /* Inner spacing */
+    border-bottom: 2px solid var(--gold); /* Gold bottom border */
+    display: flex;                     /* Flex layout */
+    transition: 0.5s;                  /* Smooth transition for animations */
+}
+
+/* ---------- FIRST PAGE HEADER ---------- */
+.header-front {
+    flex-direction: column;           /* Stack items vertically */
+    align-items: center;              /* Center horizontally */
+    text-align: center;               /* Center text */
+    padding: 60px 20px;               /* More padding for front page */
+}
+
+/* Logo for first page */
+.main-logo {
+    max-height: 200px;                /* Big logo on front page */
+    transition: 0.5s;                 /* Smooth resize animation */
+}
+
+/* Brand Name for first page */
+.brand-name {
+    font-family: 'Cinzel';            /* Elegant font */
+    color: var(--gold);               /* Gold color */
+    font-size: clamp(2rem);           /* Responsive font size */
+    margin: 0;
+}
+
+
+/* Abad Text for first page */
+.abad-text {
+    font-family: Arial, Helvetica, sans-serif;
+    color: #fff;                       /* White text */
+    font-size: 1rem;                   /* Smaller than brand name */
+    margin-top: 5px;                   /* Space below brand name */
+}
+
+/* ---------- SECOND PAGE HEADER ---------- */
+
+/* Header container - Isko column direction mein set kiya hai */
+.header-inner {
+    display: flex;
+    flex-direction: column;    /* Logo aur text ko ek ke neeche ek laane ke liye */
+    justify-content: center;   /* Vertically center */
+    align-items: center;       /* Horizontally center (Sab kuch beech mein) */
+    padding: 20px 0;           /* Thodi space upar neeche */
+    height: auto;              /* Fixed height hatadi taake content fit ho sake */
+    min-height: 100px;
+    background: #000;
+}
+
+/* Logo - Absolute position hata di hai */
+.header-inner .main-logo {
+    max-height: 80px;          /* Aapki size ke mutabiq */
+    margin-bottom: 10px;       /* Logo aur text ke beech ka gap */
+    /* Position absolute aur transform hatadiya gaya hai */
+}
+
+/* Text container - Brand name aur Abad ke liye */
+.header-inner .text-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+/* Brand name */
+.header-inner .brand-name {
+    font-size: 1.2rem;         /* Thoda bada kiya hai */
+    font-weight: 700;
+    color: var(--gold); 
+    line-height: 1.2;
+}
+
+/* Abad text */
+.header-inner .abad-text {
+    font-size: 0.8rem;
+    margin-top: 4px;
+    color: #fff;
+}
+        /* NAVIGATION */
+        /* Navigation bar ko sahi se center karne ke liye */
+.nav-bar {
+    background: #111;
+    display: flex;
+    justify-content: center; /* Bilkul beech mein rakhega */
+    align-items: center;
+    gap: 8px; /* Buttons ke darmiyan barabar jagah */
+    padding: 12px 5px;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    border-bottom: 2px solid var(--gold);
+    flex-wrap: wrap; /* Mobile par buttons ko bikhre bagair adjust karega */
+}
+
+/* Button ki styling aur ubharne wali animation */
+.nav-btn {
+    background: #000;
+    color: var(--gold);
+    border: 1px solid var(--gold);
+    padding: 8px 14px;
+    cursor: pointer;
+    font-weight: bold;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Smooth springy effect */
+    text-transform: uppercase;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+}
+
+/* Jab cursor pas jaye to ye magic hoga */
+.nav-btn:hover {
+    transform: scale(1.15) translateY(-5px); /* Button 15% bada hoga aur upar uthega */
+    background: var(--gold);
+    color: #000;
+    box-shadow: 0 10px 25px rgba(212, 175, 55, 0.6); /* Neeche shadow aayegi jo ise ubharegi */
+    z-index: 100; /* Baqi buttons ke upar nazar aayega */
+    border-color: #fff;
+}
+
+/* Click karne par halka sa dabne ka effect */
+.nav-btn:active {
+    transform: scale(0.95);
+}
+/* WELCOME BOX - Isko ab upar (Top) shift kiya gaya hai */
+.welcome-box { 
+    min-height: auto;           /* Height 'auto' rakhi hai taake ye upar hi rahe */
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    justify-content: flex-start; /* Content ko upar (start) mein align karega */
+    text-align: center; 
+    padding: 20px 20px 40px 20px; /* Upar aur niche ki spacing */
+    margin-top: 10px;           /* Header se thoda gap rakhne ke liye */
+}
+
+/* Royal Line - Waisi hi rahegi */
+.royal-line { 
+    width: 95%; 
+    max-width: 900px; 
+    height: 6px; 
+    background: linear-gradient(90deg, transparent, var(--gold), var(--light-gold), var(--gold), transparent); 
+    margin: 15px 0;             /* Gap thoda kam kiya gaya hai */
+    box-shadow: 0 0 15px var(--gold); 
+}
+
+/* Embossed Text - Waisa hi rahega */
+.embossed-text { 
+    font-family:'Lucida Sans', sans-serif; 
+    font-size: clamp(1.4rem, 6vw, 3.5rem); 
+    color: var(--gold); 
+    text-transform: uppercase; 
+    font-weight: 900; 
+    letter-spacing: 5px; 
+    text-shadow: 2px 2px 4px #000; 
+    line-height: 1.2; 
+    margin: 0; 
+}
+        /* PRODUCT GRID */
+        .product-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; padding: 20px; max-width: 1200px; margin: auto; }
+        .offer-grid { grid-template-columns: repeat(2, 1fr) !important; max-width: 800px; }
+        @media (max-width: 900px) { .product-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; } }
+
+    /* CARD */
+.card {
+    background: #111;
+    border: 1px solid #444;
+    padding: 10px;              /* 15px se thora kam */
+    border-radius: 12px;        /* 15px se thora kam */
+    text-align: center;
+    font-size: 0.75rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: all 0.4s ease;  /* animation SAME */
+    position: relative;
+}
+
+/* Hover Animation SAME */
+.card:hover {
+    border-color: var(--gold);
+    transform: translateY(-5px);
+}
+.like-icon { 
+    position: absolute; 
+    top: 15px; 
+    right: 15px; 
+    z-index: 5; 
+    font-size: 1.5rem; /* Thora bada size taake outline saaf dikhe */
+    color: transparent; /* Default mein khali rakhein */
+    -webkit-text-stroke: 1px #d4af37; /* Gold outline default mein */
+    cursor: pointer; 
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+}
+
+/* Hover Effect */
+.like-icon:hover {
+    transform: scale(1.3);
+    -webkit-text-stroke: 1px #fff; /* Hover par white outline */
+}
+
+/* Jab Liked ho jaye (Gold Color + Black Outline) */
+.like-icon.liked { 
+    color: #d4af37 !important; /* Gold filling */
+    -webkit-text-stroke: 1.5px #000; /* Black moti outline */
+    animation: goldPulse 0.6s ease-in-out; 
+    filter: drop-shadow(0 0 5px rgba(212, 175, 55, 0.4));
+}
+
+/* Click karne par ubharne wali animation */
+@keyframes goldPulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.5); }
+    100% { transform: scale(1.1); }
+}
+
+.img-container { width: 100%; aspect-ratio: 1 / 1; background: #000; border-radius: 8px; overflow: hidden; display: flex; align-items: center; justify-content: center; margin-bottom: 15px; border: 1px solid var(--gold); cursor: pointer; }
+        .img-container img { width: 100%; height: 100%; object-fit: cover; }
+        /* Add to Cart aur View Details dono ke liye base animation settings */
+.add-btn, .details-btn {
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Smooth springy effect */
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Hover Effect: Jab cursor button par jaye */
+.add-btn:hover, .details-btn:hover {
+    transform: scale(1.08); /* Button 8% bada ho jayega */
+    filter: brightness(1.2); /* Rang thora aur roshan/enhance ho jayega */
+    box-shadow: 0 8px 20px rgba(212, 175, 55, 0.4); /* Gold shadow mazeed barh jayegi */
+    z-index: 10; /* Button sabse upar nazar aayega */
+}
+
+/* Click Effect: Jab button dabaya jaye */
+.add-btn:active, .details-btn:active {
+    transform: scale(0.95); /* Dabne par thora chota hoga */
+}
+
+/* Add to Cart button par halki si chamak (Sheen effect) */
+.add-btn::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: rgba(255, 255, 255, 0.1);
+    transform: rotate(45deg);
+    transition: 0.5s;
+    pointer-events: none;
+}
+
+.add-btn:hover::after {
+    left: 120%; /* Hover karne par light guzarne ka effect aayega */
+}
+
+.badge-new { 
+    background: linear-gradient(135deg, #d4af37 0%, #f1d592 50%, #b38f1d 100%); 
+    color: #000; 
+    font-weight: 900; 
+    padding: 5px 10px; 
+    position: absolute; 
+    top: 12px; 
+    left: 12px; 
+    border-radius: 4px; 
+    font-size: 0.7rem; 
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    z-index: 20;
+
+    /* Embossed (Ubhra hua) Effect */
+    box-shadow: 
+        2px 2px 5px rgba(0,0,0,0.5), 
+        inset 1px 1px 1px rgba(255,255,255,0.8), 
+        inset -1px -1px 1px rgba(0,0,0,0.4);
+    
+    border: 1px solid #8a6d1c;
+    text-shadow: 0.5px 0.5px 0px rgba(255,255,255,0.3); /* Text par bhi halka sa effect */
+    
+    animation: shine 3s infinite;
+}
+
+/* Chamakne wala effect (Glow) */
+@keyframes shine {
+    0% { filter: brightness(1); }
+    50% { filter: brightness(1.3); transform: scale(1.05); }
+    100% { filter: brightness(1); }
+}
+        
+        h4 { font-size: 0.75rem; margin: 10px 0; color: var(--light-gold); font-family: 'Cinzel'; height: 40px; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+        
+        .price-options { text-align: center; margin: 5px auto; width: 100%; display: flex; flex-direction: column; align-items: center; gap: 5px; }
+        .custom-check { display: flex; align-items: center; justify-content: center; gap: 8px; cursor:pointer; font-size: 0.8rem; color: #eee; width: fit-content; }
+        
+        .add-btn { background: linear-gradient(135deg, var(--gold), #b38f1d); color: #000; border: none; padding: 10px; font-weight: 900; font-size: 0.8rem; cursor: pointer; border-radius: 8px; width: 100%; text-transform: uppercase; margin-top: 10px; }
+        .details-btn { background: transparent; color: var(--gold); border: 1px solid var(--gold); padding: 5px; font-size: 0.7rem; border-radius: 5px; margin-top: 5px; cursor: pointer; width: 100%; }
+
+        /* MODAL */
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 6000; align-items: center; justify-content: center; }
+        .modal-content { background: #111; border: 1px solid var(--gold); width: 90%; max-width: 500px; padding: 25px; border-radius: 15px; position: relative; text-align: center; max-height: 90vh; overflow-y: auto; }
+        .modal-img { width: 100%; max-width: 320px; border-radius: 10px; border: 1px solid var(--gold); margin-bottom: 15px; }
+        
+        .fragrance-list { text-align: left; background: #222; padding: 10px; border-radius: 8px; margin: 15px 0; border: 1px solid #444; max-height: 250px; overflow-y: auto; }
+        .frag-item { padding: 10px; border-bottom: 1px solid #333; font-size: 0.85rem; transition: 0.3s; }
+        .frag-item:last-child { border-bottom: none; }
+        .frag-item.disabled { color: #555 !important; opacity: 0.6; }
+        .frag-item input { accent-color: var(--gold); cursor: pointer; width: 18px; height: 18px; margin-left: 10px; }
+
+        /* DISCOUNT BANNER */
+        #discountBanner { 
+            display: none; 
+            background: linear-gradient(45deg, #d4af37, #f1d592); 
+            color: #000; 
+            font-weight: 900; 
+            padding: 10px; 
+            border-radius: 8px; 
+            margin: 10px 0; 
+            font-family: 'Cinzel'; 
+            text-shadow: 1px 1px 2px rgba(255,255,255,0.5);
+            animation: pulse 1.5s infinite;
+        }
+        @keyframes pulse { 0% {transform: scale(1);} 50% {transform: scale(1.05);} 100% {transform: scale(1);} }
+
+        /* SIDEBAR */
+        .cart-sidebar { position: fixed; right: -350px; top: 0; width: 320px; height: 100%; background: #000; z-index: 2000; transition: 0.4s; padding: 20px; border-left: 2px solid var(--gold); overflow-y: auto; box-sizing: border-box; }
+        .cart-sidebar.open { right: 0; }
+        .input-field { width: 100%; padding: 10px; margin: 5px 0; background: #222; border: 1px solid var(--gold); color: #fff; border-radius: 6px; box-sizing: border-box; font-size: 0.8rem; }
+
+        #thankYouOverlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 7990; align-items: center; justify-content: center; }
+    </style>
+</head>
+<body>
+
+    <div id="detailsModal" class="modal-overlay">
+        <div class="modal-content" id="modal-content"></div>
+    </div>
+
+    <div id="thankYouOverlay">
+        <div style="background: #111; border: 2px solid var(--gold); padding: 30px; border-radius: 20px; text-align: center;">
+            <h2 style="font-family:'Cinzel'; color:var(--gold);">THANK YOU!</h2>
+            <p>Order placed successfully.</p>
+            <div style="font-family:'Amiri'; font-size:1.8rem; color:var(--gold); margin:15px 0;">جَزَاكَ اللَّهُ خَيْرًا</div>
+            <button class="nav-btn" onclick="closeThankYou()">CLOSE STORE</button>
+        </div>
+    </div>
+
+    <header id="mainHeader" class="header-container header-front">
+        <img src="images/l.png" alt="Logo" class="main-logo">
+        <div class="text-container">
+            <h1 class="brand-name">AL SAQIB ATTAR & PERFUMES</h1>
+            <div class="abad-text">Our Impression Long Lasting Fragrances</div>
+        </div>
+    </header>
+
+    <nav class="nav-bar">
+        <button onclick="showSection('home')" class="nav-btn">HOME</button>
+        <button onclick="showSection('exclusive')" class="nav-btn" style="color:#fff; border-color:#fff;">🌙 OFFERS</button>
+        <button onclick="showSection('attars')" class="nav-btn">ATTARS</button>
+        <button onclick="showSection('perfumes')" class="nav-btn">PERFUMES</button>
+        <button onclick="showSection('pocket')" class="nav-btn">POCKET</button>
+        <button onclick="showSection('liked')" class="nav-btn"><i class="fas fa-heart"></i> LIKED</button>
+        <button onclick="toggleCart()" class="nav-btn"><i class="fas fa-shopping-cart"></i> (<span id="cart-count">0</span>)</button>
+    </nav>
+
+    <div id="home" class="content-section">
+        <div class="welcome-box">
+            <div class="royal-line"></div>
+            <h2 class="embossed-text">Welcome To STORE</h2>
+            <div class="royal-line"></div>
+        </div>
+    </div>
+
+    <div id="exclusive" class="content-section" style="display:none;">
+        <h2 style="text-align:center; color:var(--gold); font-family:'Cinzel'; padding-top:20px;">ENJOY EXCLUSIVE<br> 🌙 EID OFFERS  🌙 </h2>
+        <div class="product-grid offer-grid" id="exclusive-grid"></div>
+    </div>
+
+    <div id="attars" class="content-section" style="display:none;">
+        <h2 style="text-align:center; color:var(--gold); font-family:'Cinzel'; padding-top:20px;">ATTAR COLLECTION</h2>
+        <div class="product-grid" id="attar-grid"></div>
+    </div>
+
+    <div id="perfumes" class="content-section" style="display:none;">
+        <h2 style="text-align:center; color:var(--gold); font-family:'Cinzel'; padding-top:20px;">LUXURY PERFUMES</h2>
+        <div class="product-grid" id="perfume-grid"></div>
+    </div>
+
+    <div id="pocket" class="content-section" style="display:none;">
+        <h2 style="text-align:center; color:var(--gold); font-family:'Cinzel'; padding-top:20px;">POCKET PERFUMES</h2>
+        <div class="product-grid" id="pocket-grid"></div>
+    </div>
+
+    <div id="liked" class="content-section" style="display:none;">
+        <h2 style="text-align:center; color:var(--gold); font-family:'Cinzel'; padding-top:20px;">YOUR LIKED ITEMS</h2>
+        <div class="product-grid" id="liked-grid"></div>
+        <p id="liked-empty" style="text-align:center; color:#666; margin-top:50px;">No items liked yet.</p>
+    </div>
+<div id="cartSidebar" class="cart-sidebar">
+        <h2 style="color:var(--gold); font-family:'Cinzel';">Your Cart</h2>
+        <div id="cart-list"></div>
+        
+        <div style="border-top:1px solid #333; padding-top:10px; margin-top:10px;">
+            <p style="font-size:0.9rem;">🛵 Delivery: <span id="dc-amount">Rs. 299</span></p>
+            <p id="free-note" style="color:var(--gold); font-size:0.7rem;"></p>
+            <p style="font-size:1.1rem; font-weight:bold;">Total: <span id="total-price" style="color:var(--gold)">Rs. 0</span></p>
+        </div>
+
+        <div style="margin-top:10px; display:flex; gap:5px;">
+            <input type="text" id="promo-input" class="input-field" placeholder="Promo Code" style="margin-bottom:0; flex:1;">
+            <button onclick="applyPromo()" style="background:var(--gold); color:black; border:none; padding:0 10px; font-weight:bold; cursor:pointer; border-radius:4px;">APPLY</button>
+        </div>
+        <p id="promo-msg" style="font-size:0.7rem; margin:5px 0 0 5px; font-weight:bold;"></p>
+        <input type="text" id="custName" class="input-field" placeholder="Full Name" style="margin-top:15px;">
+        <input type="tel" id="custWhatsApp" class="input-field" placeholder="WhatsApp Number">
+        <textarea id="custAddress" class="input-field" placeholder="Full Address"></textarea>
+        
+        <button class="add-btn" style="background:#25d366; color:white; margin-top:10px;" onclick="checkoutWhatsApp()">ORDER ON WHATSAPP</button>
+        <button class="nav-btn" style="width:100%; margin-top:10px;" onclick="toggleCart()">CLOSE</button>
+    </div>
+
+    <script>
+    let cart = [];
+    let likedIds = [];
+    let freebieTriggered = false;
+const products = [
+    // ===== ATTARS (3ml, 6ml, 12ml) =====
+    {id:1, name:"White Oud <br> BY AL SAQIB", img:"images/attar.jpeg", type:"attar", p3:299, p6:499, p12:949, desc: "A royal and woody luxury scent."},
+    {id:2, name:"MARJ <br> BY AL SAQIB", img:"images/attar.jpeg", type:"attar", p3:299, p6:499, p12:949, desc: "Bold floral notes with spicy elegance."},
+    {id:3, name:"BRUTE <br> BY AL SAQIB", img:"images/attar.jpeg", type:"attar", p3:299, p6:499, p12:949, desc: "Strong masculine scent for brave souls."},
+    {id:4, name:"ERBA PURA <br> BY AL SAQIB", img:"images/attar.jpeg", type:"attar", p3:299, p6:499, p12:949, desc: "Exotic fruits in a sweet blend."},
+    {id:5, name:"AXE BLACK <br> BY AL SAQIB", img:"images/attar.jpeg", type:"attar", p3:299, p6:499, p12:949, desc: "Dark, cool, and magnetic aroma."},
+    {id:50, name:"SILVA <br> BY AL SAQIB", img:"images/attar.jpeg", type:"attar", p3:299, p6:499, p12:949, desc: "Sharp energy for a fresh day."},
+    {id:6, name:"CLIMATE <br> BY AL SAQIB", img:"images/attar.jpeg", type:"attar", p3:249, p6:449, p12:849, desc: "Natural calming scent of green fields."},
+    {id:7, name:"DELICIA <br> BY AL SAQIB", img:"images/attar.jpeg", type:"attar", p3:249, p6:449, p12:849, desc: "Divine creamy sweetness in every drop."}, 
+    {id:8, name:"SUPREME OUD <br> BY AL SAQIB", img:"images/attar.jpeg", type:"attar", p3:299, p6:449, p12:849, desc: "Intense oriental oud for deep souls."},
+    {id:9, name:"DUNHILL DESIRE <br> BY AL SAQIB", img:"images/attar.jpeg", type:"attar", p3:249, p6:449, p12:849, desc: "Classic citrus with a vanilla touch."},
+    {id:10, name:"DIRHAM <br> BY AL SAQIB", img:"images/attar.jpeg", type:"attar", p3:249, p6:449, p12:849, desc: "Traditional bright and herbal freshness."},
+    {id:11, name:"FRESH ROSE <br> BY AL SAQIB", img:"images/attar.jpeg", type:"attar", p3:249, p6:449, p12:849, desc: "Soft romantic petals of morning roses."},
+    {id:12, name:"BLUE SEA <br> BY AL SAQIB", img:"images/attar.jpeg", type:"attar", p3:249, p6:449, p12:849, desc: "Refreshing breeze from the deep ocean."},
+    {id:13, name:"BAKHOR <br> BY AL SAQIB", img:"images/attar.jpeg", type:"attar", p3:249, p6:449, p12:849, desc: "Ancient woody spirit for calm minds."},
+    {id:14, name:"CRYSTAL PURPLE <br> BY AL SAQIB", img:"images/attar.jpeg", type:"attar", p3:249, p6:449, p12:849, desc: "Elegant floral sweetness with a royal touch."},
+    {id:15, name:"ETERNITY <br> BY AL SAQIB", img:"images/attar.jpeg", type:"attar", p3:249, p6:449, p12:849, desc: "Timeless fresh scent for all occasions."},
+
+    // ===== PERFUMES (30ml) - Rs. 849 =====
+    {id:101, name:"WHITE OUD <br> BY AL SAQIB", img:"images/white.png", type:"perfume", p:849, desc: "A royal and woody luxury perfume."},
+    {id:102, name:"MARJ <br> BY AL SAQIB", img:"images/golden.png", type:"perfume", p:849, desc: "Bold floral notes with spicy elegance."},
+    {id:103, name:"BRUTE <br> BY AL SAQIB", img:"images/brown.jpg", type:"perfume", p:849, desc: "Strong masculine perfume for brave souls."},
+    {id:104, name:"ERBA PURA <br> BY AL SAQIB", img:"images/white.png", type:"perfume", p:849, desc: "Exotic fruits in a sweet perfume."},
+    {id:105, name:"AXE BLACK <br> BY AL SAQIB", img:"images/black.jpg", type:"perfume", p:849, desc: "Dark, cool, and magnetic perfume."},
+    {id:106, name:"SILVA <br> BY AL SAQIB", img:"images/golden.png", type:"perfume", p:849, desc: "Sharp energy in a luxury perfume."},
+    {id:107, name:"CLIMATE <br> BY AL SAQIB", img:"images/golden.png", type:"perfume", p:849, desc: "Natural calming scent in a spray perfume."},
+    {id:108, name:"DELICIA <br> BY AL SAQIB", img:"images/golden.png", type:"perfume", p:849, desc: "Divine creamy sweetness in a luxury spray."},
+    {id:109, name:"SUPREME OUD <br> BY AL SAQIB", img:"images/golden.png", type:"perfume", p:849, desc: "Intense oriental oud spray."},
+    {id:110, name:"DUNHILL DESIRE <br> BY AL SAQIB", img:"images/golden.png", type:"perfume", p:849, desc: "Classic citrus perfume spray."},
+    {id:111, name:"DIRHAM <br> BY AL SAQIB", img:"images/golden.png", type:"perfume", p:849, desc: "Traditional bright and herbal perfume."},
+    {id:112, name:"FRESH ROSE <br> BY AL SAQIB", img:"images/white.png", type:"perfume", p:849, desc: "Soft romantic rose perfume."},
+    {id:113, name:"BLUE SEA <br> BY AL SAQIB", img:"images/blue.png", type:"perfume", p:849, desc: "Refreshing oceanic perfume spray."},
+    {id:114, name:"BAKHOR <br> BY AL SAQIB", img:"images/golden.png", type:"perfume", p:849, desc: "Ancient woody spirit in perfume spray."},
+    {id:115, name:"CRYSTAL PURPLE <br> BY AL SAQIB", img:"images/white.png", type:"perfume", p:849, desc: "Royal sweet perfume spray."},
+    {id:116, name:"ETERNITY <br> BY AL SAQIB", img:"images/white.png", type:"perfume", p:849, desc: "Fresh timeless perfume spray."},
+
+    // ===== POCKET SPRAYS (10ml) - Rs. 299 =====
+    {id:201, name:"POCKET WHITE OUD <br> BY AL SAQIB", img:"images/l.jpg", type:"pocket", p:299, desc: "Royal woody luxury in pocket spray."},
+    {id:202, name:"POCKET MARJ <br> BY AL SAQIB", img:"images/o.jpg", type:"pocket", p:299, desc: "Spicy floral elegance in pocket spray."},
+    {id:203, name:"POCKET BRUTE <br> BY AL SAQIB", img:"images/l.jpg", type:"pocket", p:299, desc: "Strong masculine scent in pocket spray."},
+    {id:204, name:"POCKET ERBA PURA <br> BY AL SAQIB", img:"images/l.jpg", type:"pocket", p:299, desc: "Exotic sweet fruits in pocket spray."},
+    {id:205, name:"POCKET AXE BLACK <br> BY AL SAQIB", img:"images/o.jpg", type:"pocket", p:299, desc: "Dark and magnetic pocket spray."},
+    {id:206, name:"POCKET SILVA <br> BY AL SAQIB", img:"images/l.jpg", type:"pocket", p:299, desc: "Sharp fresh energy in pocket spray."},
+    {id:207, name:"POCKET CLIMATE <br> BY AL SAQIB", img:"images/o.jpg", type:"pocket", p:299, desc: "Fresh green fields in pocket spray."},
+    {id:208, name:"POCKET DELICIA <br> BY AL SAQIB", img:"images/l.jpg", type:"pocket", p:299, desc: "Creamy sweetness in pocket spray."},
+    {id:209, name:"POCKET SUPREME OUD <br> BY AL SAQIB", img:"images/o.jpg", type:"pocket", p:299, desc: "Oriental oud in pocket spray."},
+    {id:210, name:"POCKET DUNHILL DESIRE <br> BY AL SAQIB", img:"images/l.jpg", type:"pocket", p:299, desc: "Classic citrus pocket spray."},
+    {id:211, name:"POCKET DIRHAM <br> BY AL SAQIB", img:"images/o.jpg", type:"pocket", p:299, desc: "Traditional herbal pocket spray."},
+    {id:212, name:"POCKET FRESH ROSE <br> BY AL SAQIB", img:"images/l.jpg", type:"pocket", p:299, desc: "Morning rose petals pocket spray."},
+    {id:213, name:"POCKET BLUE SEA <br> BY AL SAQIB", img:"images/o.jpg", type:"pocket", p:299, desc: "Ocean breeze in pocket spray."},
+    {id:214, name:"POCKET BAKHOR <br> BY AL SAQIB", img:"images/l.jpg", type:"pocket", p:299, desc: "Ancient woody spirit pocket spray."},
+    {id:215, name:"POCKET CRYSTAL PURPLE <br> BY AL SAQIB", img:"images/o.jpg", type:"pocket", p:299, desc: "Royal sweet pocket spray."},
+    {id:216, name:"POCKET ETERNITY <br> BY AL SAQIB", img:"images/l.jpg", type:"pocket", p:299, desc: "Timeless fresh pocket spray."},
+
+    // ===== EID SPECIAL OFFERS =====
+    {id:43, name:"EID BUNDLE (1)<br> 3 Ml ATTARS ", img:"images/3.jpg", type:"exclusive", size:"3ml", desc: "Pick any 3 fragrances in 3ml size."},
+    {id:44, name:"EID BUNDLE (2)<br> 6 Ml ATTARS ", img:"images/6.png", type:"exclusive", size:"6ml", desc: "Pick any 3 fragrances in 6ml size."},
+    {id:45, name:"EID BUNDLE (3)<br> 12 Ml ATTARS", img:"images/12.jpg", type:"exclusive", size:"12ml", desc: "Pick any 3 fragrances in 12ml size."}
+];
+
+const fragranceList = [
+ {name: "White Oud", cat: "premium"},
+ {name: "Marj", cat: "premium"},
+ {name: "Brute", cat: "premium"},
+ {name: "Erba Pura", cat: "premium"},
+ {name: "Axe Black", cat: "premium"},
+ {name: "Silva", cat: "premium"},
+ {name: "Climate", cat: "regular"},
+ {name: "Delicia", cat: "regular"},
+ {name: "Supreme Oud", cat: "regular"},
+ {name: "Dunhill Desire", cat: "regular"},
+ {name: "Dirham", cat: "regular"},
+ {name: "Fresh Rose", cat: "regular"},
+ {name: "Blue Sea", cat: "regular"},
+ {name: "Bakhor", cat: "regular"},
+ {name: "Crystal Purple", cat: "regular"},
+ {name: "Eternity", cat: "regular"}
+];  
+
+// 1. Notification Function (Your original style)
+function showNotify(msg) {
+    let n = document.createElement('div');
+    n.style.cssText = "position:fixed; top:20px; right:20px; background:linear-gradient(145deg, #1a1a1a, #000); color:#d4af37; padding:15px 25px; border:1px solid #d4af37; border-radius:8px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); z-index:10000; font-family:'Cinzel', serif; animation: slideIn 0.5s ease-out; font-size:0.8rem; border-left:5px solid #d4af37;";
+    n.innerHTML = `<i class="fas fa-shopping-cart"></i> ${msg}`;
+    document.body.appendChild(n);
+    setTimeout(() => n.remove(), 3000);
+}
+
+// 2. Create Card Function
+function createCard(p) {
+    const isLiked = likedIds.includes(p.id) ? 'liked' : '';
+    let options = "";
+    let badge = (p.type === 'exclusive') ? `<div class="badge-new">15% OFF</div>` : "";
+
+    if(p.type === 'attar') {
+        options = `<div class="price-options">
+            <label class="custom-check"><input type="radio" name="opt-${p.id}" id="s3-${p.id}" checked> 3ml-Rs.${p.p3}</label>
+            <label class="custom-check"><input type="radio" name="opt-${p.id}" id="s6-${p.id}"> 6ml-Rs.${p.p6}</label>
+            <label class="custom-check"><input type="radio" name="opt-${p.id}" id="s12-${p.id}"> 12ml-Rs.${p.p12}</label>
+        </div>`;
+    } else if(p.type === 'perfume' || p.type === 'pocket') {
+        let sz = p.type === 'perfume' ? '30ml' : '10ml';
+        options = `<div class="price-options">
+            <label class="custom-check"><input type="radio" name="opt-${p.id}" checked> ${sz}-Rs.${p.p}</label>
+        </div>`;
+    }
+
+    return `
+    <div class="card">
+        ${badge}
+        <div class="img-container" onclick="showDetails(${p.id})">
+            <img src="${p.img}" alt="${p.name}">
+        </div>
+        <h4>${p.name}</h4>
+        ${options}
+        <i class="fas fa-heart like-icon ${isLiked}" onclick="toggleLike(${p.id})"></i>
+        <button class="add-btn" onclick="${p.type === 'exclusive' ? `showDetails(${p.id})` : `addFromCard(${p.id})`}">
+            ${p.type === 'exclusive' ? 'SELECT FRAGRANCES' : 'ADD TO CART'}
+        </button>
+        <button class="details-btn" onclick="showDetails(${p.id})">VIEW DETAILS</button>
+    </div>`;
+}
+
+// 3. Add From Card (Direct Addition)
+function addFromCard(id) {
+    const p = products.find(x => x.id === id);
+    let price, size;
+    if(p.type === 'attar') {
+        if(document.getElementById(`s3-${id}`).checked) { price = p.p3; size = '3ml'; }
+        else if(document.getElementById(`s6-${id}`).checked) { price = p.p6; size = '6ml'; }
+        else { price = p.p12; size = '12ml'; }
+    } else { 
+        price = p.p; 
+        size = p.type==='perfume'?'30ml':'10ml'; 
+    }
+    const itemName = `${p.name} (${size})`;
+    cart.push({name: itemName, price: price, qty: 1});
+    updateCart();
+    showNotify(`${itemName} added to cart!`);
+}
+
+// 4. Show Details (Modal View)
+function showDetails(id) {
+    const p = products.find(x => x.id === id);
+    const content = document.getElementById('modal-content');
+    
+    let descriptionHTML = p.desc ? `<p style="font-size:0.9rem; color:#d4af37; text-align:center; font-style:italic; margin: 5px 0; font-family: 'Cinzel', serif; line-height:1.2;">"${p.desc}"</p>` : "";
+    let selectionHTML = "";
+
+    if (p.type === 'exclusive') {
+        selectionHTML = `
+            <div id="offerBanner" style="background:#d4af37; color:#000; padding:5px; font-weight:bold; font-size:0.8rem; margin:5px 0; display:none; text-align:center; border-radius:4px;">🌙 EID 15% DISCOUNT APPLIED!</div>
+            <div class="fragrance-list" style="max-height:130px; overflow-y:auto; border:1px solid #d4af37; padding:2px; border-radius:8px; background:#000;">
+                ${fragranceList.map(f => {
+                    let pr = (p.size==='3ml') ? (f.cat==='premium'?299:249) : (p.size==='6ml' ? (f.cat==='premium'?449:399) : (f.cat==='premium'?999:749));
+                    return `<div style="display:flex; justify-content:space-between; padding:8px; border-bottom:1px solid #222; align-items:center;">
+                        <span style="color:#fff; font-size:0.85rem;">${f.name} <br><small style="color:#d4af37;">Rs.${pr}</small></span>
+                        <input type="checkbox" class="offer-check" data-price="${pr}" value="${f.name}" onchange="handleSelection()" style="accent-color:#d4af37;">
+                    </div>`;
+                }).join('')}
+            </div>
+            <div id="price-preview" style="margin-top:10px; font-weight:bold; text-align:center; color:#d4af37; font-size:1rem; border:1px dashed #d4af37; padding:5px;">Selected: 0/3</div>
+        `;
+    } else if (p.type === 'attar') {
+        selectionHTML = `
+            <div style="margin: 10px 0; padding: 10px; border: 1px dashed #d4af37; border-radius: 8px; background: rgba(212, 175, 55, 0.05); display: flex; flex-direction: column; gap: 5px; align-items: center; font-size: 0.85rem;">
+                <label style="color:#fff;"><input type="radio" name="attar-size" id="ms3" checked> 3ml - Rs.${p.p3}</label>
+                <label style="color:#fff;"><input type="radio" name="attar-size" id="ms6"> 6ml - Rs.${p.p6}</label>
+                <label style="color:#fff;"><input type="radio" name="attar-size" id="ms12"> 12ml - Rs.${p.p12}</label>
+            </div>`;
+    } else {
+        let sizeTag = (p.type === 'perfume') ? "30ml" : "10ml";
+        selectionHTML = `
+            <div style="margin: 10px 0; padding: 10px; border: 1px dashed #d4af37; border-radius: 8px; text-align:center;">
+                <label style="color:#fff; font-weight:bold;"><input type="radio" checked> ${sizeTag} Bottle - Rs.${p.p}</label>
+            </div>`;
+    }
+
+    content.innerHTML = `
+        <span style="float:right; cursor:pointer; color:#d4af37; font-size:2rem;" onclick="closeModal()">&times;</span>
+        <div style="text-align:center;"><img src="${p.img}" style="height:140px; border-radius:10px; object-fit:contain;"></div>
+        <h2 style="color:#d4af37; text-align:center; font-family:'Cinzel'; margin:5px 0; font-size:1.2rem;">${p.name}</h2>
+        ${descriptionHTML} ${selectionHTML}
+        <button class="add-btn" style="width:100%; margin-top:10px; padding:12px; font-weight:bold;" onclick="modalAdd(${p.id})">
+            ${p.type === 'exclusive' ? 'CONFIRM EID BUNDLE' : 'ADD TO CART'}
+        </button>
+    `;
+    document.getElementById('detailsModal').style.display = 'flex';
+}
+
+// 5. Handle Selection (Bundle Logic)
+function handleSelection() {
+    const checked = document.querySelectorAll('.offer-check:checked');
+    const all = document.querySelectorAll('.offer-check');
+    const preview = document.getElementById('price-preview');
+    const banner = document.getElementById('offerBanner');
+    let total = 0;
+    checked.forEach(c => total += parseInt(c.dataset.price));
+
+    if(checked.length === 3) {
+        let disc = Math.floor(total * 0.85);
+        banner.style.display = "block";
+        preview.innerHTML = `<span style="text-decoration:line-through; color:gray; font-size:0.8rem;">Rs.${total}</span> Rs.${disc}`;
+        all.forEach(c => { if(!c.checked) c.disabled = true; else c.parentElement.style.color = '#ff4d4d'; });
+    } else {
+        banner.style.display = "none";
+        preview.innerHTML = `Selected: ${checked.length}/3 (Total: Rs.${total})`;
+        all.forEach(c => { c.disabled = false; c.parentElement.style.color = c.checked ? '#ff4d4d' : '#fff'; });
+    }
+}
+
+// 6. Modal Add (FIXED: No more Ramadan, Correct names)
+function modalAdd(id) {
+    const p = products.find(x => x.id === id);
+    let item = {};
+    if(p.type === 'exclusive') {
+        const checked = document.querySelectorAll('.offer-check:checked');
+        if(checked.length !== 3) return alert("Please select 3 fragrances!");
+        let total = 0; let names = [];
+        checked.forEach(c => { total += parseInt(c.dataset.price); names.push(c.value); });
+        item = { name: `Eid Bundle (${p.size}): ${names.join(', ')}`, price: Math.floor(total * 0.85), qty: 1 };
+    } else {
+        let size = ""; let price = p.p;
+        if(p.type === 'attar') {
+            if(document.getElementById('ms3').checked) { size="3ml"; price=p.p3; }
+            else if(document.getElementById('ms6').checked) { size="6ml"; price=p.p6; }
+            else { size="12ml"; price=p.p12; }
+        } else { size = (p.type === 'perfume') ? "30ml" : "10ml"; }
+        item = { name: `${p.name} (${size})`, price: price, qty: 1 };
+    }
+    cart.push(item);
+    updateCart();
+    closeModal();
+    showNotify(`${item.name.split(':')[0]} added!`); // Safely show name
+}
+
+// 7. Update Cart (Final UI)
+function updateCart() {
+    const cartCountElement = document.getElementById('cart-count');
+    if (cartCountElement) cartCountElement.innerText = cart.length;
+
+    let sub = cart.reduce((s, i) => s + i.price, 0);
+
+    if (typeof confetti === "function" && sub >= 1999 && !freebieTriggered) {
+        confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 }, colors: ['#d4af37', '#ffffff'] });
+        freebieTriggered = true;
+    } else if (sub < 1999) { freebieTriggered = false; }
+
+    let dc = (sub >= 1999 || sub === 0) ? 0 : 299;
+    let finalTotal = sub - ((sub * discountPercent) / 100) + dc;
+
+    const cartList = document.getElementById('cart-list');
+    if (cartList) {
+        cartList.innerHTML = cart.map((item, i) => `
+            <div style="display:flex; justify-content:space-between; font-size:0.7rem; margin-bottom:8px; background:#111; padding:8px; border-left:2px solid #d4af37;">
+                <span style="max-width:70%">${item.name}</span>
+                <span>Rs.${item.price} <i class="fas fa-trash" onclick="remove(${i})" style="color:red; cursor:pointer; margin-left:5px;"></i></span>
+            </div>`).join('');
+    }
+
+    if(document.getElementById('dc-amount')) document.getElementById('dc-amount').innerHTML = dc === 0 ? "<span style='color:#25d366'>FREE 🎉</span>" : `Rs. 299`;
+    if(document.getElementById('free-note')) document.getElementById('free-note').innerText = (sub < 1999 && sub > 0) ? `Add Rs.${1999 - sub} for FREE Delivery` : "Eligible for FREE Delivery!";
+    if(document.getElementById('total-price')) document.getElementById('total-price').innerText = "Rs. " + Math.round(finalTotal);
+}
+
+function remove(i) { cart.splice(i,1); updateCart(); }
+function toggleCart() { document.getElementById('cartSidebar').classList.toggle('open'); }
+function closeModal() { document.getElementById('detailsModal').style.display = 'none'; }
+
+function renderProducts() {
+    ['attar', 'perfume', 'pocket', 'exclusive'].forEach(type => {
+        const grid = document.getElementById(type + "-grid");
+        if(grid) {
+            grid.innerHTML = "";
+            products.filter(p => p.type === type).forEach(p => grid.innerHTML += createCard(p));
+        }
+    });
+}
+function checkoutWhatsApp() {
+    const n = document.getElementById('custName').value, 
+          w = document.getElementById('custWhatsApp').value, 
+          a = document.getElementById('custAddress').value;
+
+    if(!n || !w || !a || cart.length === 0) return alert("Please fill all details!");
+
+    // 1. Order ID Generate karein (Unique dikhne ke liye)
+    const orderID = "AS-" + Math.floor(1000 + Math.random() * 9000);
+
+    const now = new Date();
+    const orderTime = now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+    const orderDate = now.toLocaleDateString();
+
+    let msg = `*AL SAQIB ATTAR AND PERFUME INVOICE*%0A`;
+    msg += `*Order ID:* ${orderID}%0A%0A`; 
+
+    msg += `*Customer:* ${n}%0A`;
+    msg += `*Number:* ${w}%0A`;
+    msg += `*Address:* ${a}%0A`;
+    msg += `*Date:* ${orderDate} | *Time:* ${orderTime}%0A%0A`;
+
+    msg += `*S.No | Item Name | Price*%0A`;
+    msg += `------------------------------------%0A`;
+
+    cart.forEach((item, index) => {
+        let cleanName = item.name.replace(/<br>/gi, ' '); 
+        // Yahan item.size hata diya hai taake undefined na aaye
+        msg += `${index + 1}. ${cleanName} | Rs.${item.price}%0A`;
+    });
+
+    msg += `------------------------------------%0A`;
+
+    let sub = cart.reduce((s,i) => s + i.price, 0);
+    let dcText = document.getElementById('dc-amount').innerText;
+    let dcValue = dcText.includes("FREE") ? 0 : 299;
+    let discountAmount = (sub * discountPercent) / 100;
+    let finalTotal = Math.round(sub - discountAmount + dcValue);
+
+    msg += `*Sub-Total:* Rs.${sub}%0A`;
+    if (discountPercent > 0) {
+        msg += `*Promo Discount:* -Rs.${Math.round(discountAmount)} (${discountPercent}%25)%0A`;
+    }
+    msg += `*Delivery:* ${dcText}%0A`;
+    msg += `*GRAND TOTAL:* Rs.${finalTotal}%0A%0A`;
+
+    msg += `_Thank you for shopping with us!_`;
+
+    // Direct WhatsApp Open (No Popup & No Payment Mode)
+    window.open(`https://wa.me/923353397893?text=${msg}`);
+    document.getElementById('thankYouOverlay').style.display = 'flex';
+}
+
+function toggleLike(id) {
+    likedIds.includes(id) ? likedIds = likedIds.filter(i => i !== id) : likedIds.push(id);
+    renderProducts();
+    renderLiked();
+}
+
+function renderLiked() {
+    const grid = document.getElementById('liked-grid');
+    const emptyMsg = document.getElementById('liked-empty');
+    grid.innerHTML = "";
+    const likedItems = products.filter(p => likedIds.includes(p.id));
+    if (likedItems.length > 0) {
+        emptyMsg.style.display = 'none';
+        likedItems.forEach(p => grid.innerHTML += createCard(p));
+    } else { emptyMsg.style.display = 'block'; }
+}
+
+function showSection(id) {
+    document.querySelectorAll('.content-section').forEach(s => s.style.display = 'none');
+    document.getElementById(id).style.display = 'block';
+    document.getElementById('mainHeader').className = (id==='home') ? 'header-container header-front' : 'header-container header-inner';
+    window.scrollTo(0,0);
+}
+
+function closeThankYou() {
+    document.getElementById('thankYouOverlay').style.display = 'none';
+    cart = []; updateCart(); toggleCart(); showSection('home');
+}
+window.onload = renderProducts;
+// --- SAQIB PROMO SYSTEM ---
+
+// 1. Pehle Promo Codes ki list (Agar pehle se nahi likhi)
+const promoCodes = {
+    "124421-10505": 5,
+    "PREMIUM-15454": 5,
+    "ATTAR-2026": 5,
+    "FRAGRANCE-51947": 5,
+    "POCKET-2009": 5,
+    "ALSAQIB-3000": 5,
+    "EID OFFER-2026": 5
+};
+
+let discountPercent = 0; 
+
+// 2. AB YAHAN YE FUNCTION PASTE KAREIN
+function applyPromo() {
+    const inputField = document.getElementById('promo-input');
+    const msg = document.getElementById('promo-msg');
+    const btn = event.target; 
+
+    // Button Click Animation
+    btn.style.transform = "scale(0.9)";
+    btn.style.transition = "0.1s";
+    setTimeout(() => { btn.style.transform = "scale(1)"; }, 150);
+
+    const code = inputField.value.trim().toUpperCase();
+
+    if (promoCodes[code]) {
+        discountPercent = promoCodes[code]; 
+        
+        // Embossed Gold Effect
+        msg.innerHTML = `✨ Promo Applied! ${discountPercent}% Discount ✨`;
+        msg.style.display = "block";
+        msg.style.marginTop = "10px";
+        msg.style.color = "#d4af37";
+        msg.style.fontSize = "0.85rem";
+        msg.style.fontWeight = "bold";
+        msg.style.textShadow = "1px 1px 0px rgba(255,255,255,0.2), -1px -1px 0px rgba(0,0,0,0.8)";
+        
+        // Screen par price update karne ke liye
+        if (typeof updateCart === "function") updateCart();
+
+    } else {
+        discountPercent = 0;
+        msg.innerHTML = "❌ Invalid Promo Code!";
+        msg.style.display = "block";
+        msg.style.color = "#ff4d4d";
+        msg.style.textShadow = "none";
+        if (typeof updateCart === "function") updateCart();
+    }
+}    
+</script>
+</body>
+
+</html>
