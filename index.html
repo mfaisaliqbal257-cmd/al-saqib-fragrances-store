@@ -3,18 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Al Saqib Premium Store</title>
+    <title>Al Saqib Attars & Perfumes</title>
+    <link rel="icon" type="image/png" href="images/LOGO.png">
+    
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;900&family=Poppins:wght@400;500&family=Amiri:wght@400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
     
+    <!-- ==========================================
+         [ CSS STYLES - ALL SECTIONS ]
+         ========================================== -->
     <style>
         :root { --gold: #d4af37; --brown: #2c1e14; --black: #000; --light-gold: #f1d592; }
         body { font-family: 'Poppins', sans-serif; margin: 0; background: linear-gradient(135deg, #7a2f00, #3d1a00, #d4af37); color: #fff; overflow-x: hidden; }
 
-        /* =========================
-           HEADER STYLES
-           ========================= */
+        /* HEADER STYLES */
         .header-container { background: #000; padding: 20px; border-bottom: 2px solid var(--gold); display: flex; transition: 0.5s; }
         .header-front { flex-direction: column; align-items: center; text-align: center; padding: 40px 20px; }
         .main-logo { max-height: 250px; transition: 0.5s; width: auto; object-fit: contain; }
@@ -27,22 +30,23 @@
         .header-inner .brand-name { font-size: 1.2rem; font-weight: 700; color: var(--gold); line-height: 1.2; }
         .header-inner .abad-text { font-size: 0.8rem; margin-top: 4px; color: #fff; }
 
-        /* NAVIGATION */
+        /* NAVIGATION BAR */
         .nav-bar { background: #111; display: flex; justify-content: center; align-items: center; gap: 8px; padding: 12px 5px; position: sticky; top: 0; z-index: 1000; border-bottom: 2px solid var(--gold); flex-wrap: wrap; }
         .nav-btn { background: #000; color: var(--gold); border: 1px solid var(--gold); padding: 8px 14px; cursor: pointer; font-weight: bold; border-radius: 6px; font-size: 0.75rem; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); text-transform: uppercase; box-shadow: 0 2px 5px rgba(0,0,0,0.3); }
         .nav-btn:hover { transform: scale(1.15) translateY(-5px); background: var(--gold); color: #000; box-shadow: 0 10px 25px rgba(212, 175, 55, 0.6); z-index: 100; border-color: #fff; }
         .nav-btn:active { transform: scale(0.95); }
 
-        /* WELCOME BOX WITH FLOATING IMAGES */
+        /* FLOATING IMAGES & CARDS */
         .welcome-box { display: flex; flex-direction: column; align-items: center; text-align: center; padding: 40px 20px; margin-top: 10px; position: relative; }
         .royal-line { width: 95%; max-width: 900px; height: 6px; background: linear-gradient(90deg, transparent, var(--gold), var(--light-gold), var(--gold), transparent); margin: 15px 0; box-shadow: 0 0 15px var(--gold); }
         .embossed-text { font-family:'Lucida Sans', sans-serif; font-size: clamp(1.4rem, 6vw, 3.5rem); color: var(--gold); text-transform: uppercase; font-weight: 900; letter-spacing: 5px; text-shadow: 2px 2px 4px #000; line-height: 1.2; margin: 0; }
         
-        .floating-container { display: flex; justify-content: center; gap: 30px; margin-top: 40px; width: 100%; max-width: 1000px; flex-wrap: nowrap; }
-        .floating-card { background: rgba(0,0,0,0.6); border: 1px solid var(--gold); border-radius: 12px; padding: 15px; width: 180px; text-align: center; box-shadow: 0 10px 20px rgba(0,0,0,0.5); animation: floatAnim 4s ease-in-out infinite; }
-        .floating-card:nth-child(2) { animation-delay: 1s; }
-        .floating-card:nth-child(3) { animation-delay: 2s; }
-        .floating-card img { width: 100%; height: 150px; object-fit: cover; border-radius: 8px; border: 1px solid #333; }
+        .floating-container { display: flex; justify-content: center; gap: 20px; margin-top: 40px; width: 100%; max-width: 1050px; flex-wrap: nowrap; }
+        .floating-card { background: rgba(0,0,0,0.6); border: 1px solid var(--gold); border-radius: 12px; padding: 15px; width: 180px; text-align: center; box-shadow: 0 10px 20px rgba(0,0,0,0.5); animation: floatAnim 4s ease-in-out infinite; cursor: pointer; transition: transform 0.3s ease, border-color 0.3s ease; }
+        .floating-card:hover { border-color: #fff; transform: scale(1.05); }
+        .floating-card:nth-child(2) { animation-delay: 0.8s; }
+        .floating-card:nth-child(3) { animation-delay: 1.6s; }
+        .floating-card img, .floating-card video { width: 100%; height: 150px; object-fit: cover; border-radius: 8px; border: 1px solid #333; }
         .floating-card p { font-family: 'Cinzel'; font-size: 0.85rem; color: var(--gold); margin: 10px 0 0 0; font-weight: bold; }
 
         @keyframes floatAnim {
@@ -51,26 +55,31 @@
             100% { transform: translateY(0px); }
         }
 
-        /* PRODUCT GRID & CARDS */
+        /* PRODUCT GRIDS & CARDS */
         .product-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; padding: 20px; max-width: 1200px; margin: auto; }
-        .card { background: #111; border: 1px solid #444; padding: 15px; border-radius: 12px; text-align: center; font-size: 0.75rem; display: flex; flex-direction: column; align-items: center; transition: all 0.4s ease; position: relative; width: 100%; box-sizing: border-box; }
+        .card { background: #111; border: 1px solid #444; padding: 15px; border-radius: 12px; text-align: center; font-size: 0.75rem; display: flex; flex-direction: column; align-items: center; transition: all 0.4s ease; position: relative; width: 100%; box-sizing: border-box; scroll-margin-top: 80px; }
         .card:hover { border-color: var(--gold); transform: translateY(-5px); }
+        .content-section { scroll-margin-top: 80px; }
+
+        /* ENHANCED PURE CSS LIKE BUTTON (GOLDEN & HEARTBEAT) */
+        .like-container { position: absolute; top: 15px; right: 15px; z-index: 15; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; cursor: pointer; background: rgba(0,0,0,0.5); border-radius: 50%; border: 1px solid rgba(214, 175, 55, 0.3); transition: all 0.3s ease; }
+        .like-container:hover { background: rgba(0,0,0,0.8); transform: scale(1.15); border-color: var(--gold); }
         
-        /* GOLD HEART BEAT ANIMATION FOR LIKE OPTION */
-        .like-icon { position: absolute; top: 15px; right: 15px; z-index: 5; font-size: 1.5rem; color: transparent; -webkit-text-stroke: 1px var(--gold); cursor: pointer; transition: all 0.3s ease; }
-        .like-icon.liked { color: var(--gold) !important; -webkit-text-stroke: 1px var(--gold); animation: heartbeat 0.6s ease-in-out infinite alternate; }
+        .custom-heart { font-size: 1.4rem; color: transparent; -webkit-text-stroke: 1.5px var(--gold); text-stroke: 1.5px var(--gold); transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        
+        /* When Item is Liked */
+        .like-container.active-liked .custom-heart { color: var(--gold); -webkit-text-stroke: 0px transparent; text-stroke: 0px transparent; text-shadow: 0 0 10px rgba(214, 175, 55, 0.8); animation: heartbeat 0.8s ease-in-out infinite; }
 
         @keyframes heartbeat {
             0% { transform: scale(1); }
-            20% { transform: scale(1.25); }
-            40% { transform: scale(1.1); }
-            60% { transform: scale(1.35); }
-            80% { transform: scale(1); }
-            100% { transform: scale(1.2); }
+            14% { transform: scale(1.25); }
+            28% { transform: scale(1); }
+            42% { transform: scale(1.25); }
+            70% { transform: scale(1); }
         }
 
         .img-container { width: 100%; aspect-ratio: 1 / 1; background: #000; border-radius: 8px; overflow: hidden; display: flex; align-items: center; justify-content: center; margin-bottom: 15px; border: 1px solid var(--gold); cursor: pointer; }
-        .img-container img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease; }
+        .img-container img, .img-container video { width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease; }
         
         .add-btn, .details-btn { transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); cursor: pointer; position: relative; overflow: hidden; }
         .add-btn:hover, .details-btn:hover { transform: scale(1.08); filter: brightness(1.2); box-shadow: 0 8px 20px rgba(212, 175, 55, 0.4); z-index: 10; }
@@ -85,18 +94,17 @@
         .add-btn { background: linear-gradient(135deg, var(--gold), #b38f1d); color: #000; border: none; padding: 10px; font-weight: 900; font-size: 0.8rem; cursor: pointer; border-radius: 8px; width: 100%; text-transform: uppercase; margin-top: 10px; }
         .details-btn { background: transparent; color: var(--gold); border: 1px solid var(--gold); padding: 6px; font-size: 0.75rem; border-radius: 5px; margin-top: 8px; cursor: pointer; width: 100%; }
 
-        /* MODALS & BANNER */
+        /* MODALS, SIDEBAR & OVERLAYS */
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 6000; align-items: center; justify-content: center; }
         .modal-content { background: #111; border: 1px solid var(--gold); width: 90%; max-width: 500px; padding: 25px; border-radius: 15px; position: relative; text-align: center; max-height: 90vh; overflow-y: auto; }
         .fragrance-list { text-align: left; background: #222; padding: 10px; border-radius: 8px; margin: 15px 0; border: 1px solid #444; max-height: 250px; overflow-y: auto; }
 
-        /* SIDEBAR */
         .cart-sidebar { position: fixed; right: -350px; top: 0; width: 320px; height: 100%; background: #000; z-index: 2000; transition: 0.4s; padding: 20px; border-left: 2px solid var(--gold); overflow-y: auto; box-sizing: border-box; }
         .cart-sidebar.open { right: 0; }
         .input-field { width: 100%; padding: 10px; margin: 5px 0; background: #222; border: 1px solid var(--gold); color: #fff; border-radius: 6px; box-sizing: border-box; font-size: 0.8rem; }
         #thankYouOverlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 7990; align-items: center; justify-content: center; }
 
-        /* COMPACT EXPANDABLE FOOTER */
+        /* FOOTER DESIGN */
         .footer { background-color: #000000; color: #ffffff; padding: 40px 0 20px 0; font-family: 'Poppins', sans-serif; border-top: 2px solid #d4af37; }
         .footer-container { max-width: 1200px; margin: 0 auto; display: flex; flex-wrap: wrap; justify-content: space-between; padding: 0 20px; }
         .footer-row { flex: 1; min-width: 220px; margin-bottom: 20px; padding: 0 10px; }
@@ -112,7 +120,7 @@
         .footer-row p i { margin-right: 8px; color: #d4af37; }
         .footer-bottom { text-align: center; padding-top: 15px; margin-top: 25px; border-top: 1px solid #222222; font-size: 12px; color: #888888; }
 
-        /* MOBILE ADJUSTMENTS */
+        /* RESPONSIVE LAYOUT ADJUSTMENTS */
         @media (max-width: 768px) {
             .header-front { padding: 25px 15px; }
             .main-logo { max-height: 160px; }
@@ -126,10 +134,10 @@
             .add-btn { font-size: 0.75rem; padding: 8px; margin-top: 6px; }
             .details-btn { font-size: 0.7rem; padding: 5px; margin-top: 5px; }
             
-            .floating-container { gap: 8px; padding: 0 5px; margin-top: 25px; }
+            .floating-container { gap: 8px; padding: 0 5px; margin-top: 25px; flex-wrap: nowrap; }
             .floating-card { width: 33.33%; padding: 6px; border-radius: 8px; }
-            .floating-card img { height: 70px; border-radius: 6px; }
-            .floating-card p { font-size: 0.6rem; margin-top: 4px; }
+            .floating-card img, .floating-card video { height: 75px; border-radius: 4px; }
+            .floating-card p { font-size: 0.65rem; margin-top: 5px; line-height: 1.1; }
             
             .footer-container { flex-direction: column; padding: 0 15px; }
             .footer-row { border-bottom: 1px solid #222; padding-bottom: 10px; margin-bottom: 10px; }
@@ -143,12 +151,15 @@
 </head>
 <body>
 
-    <!-- Main Dynamic Modal System -->
+    <!-- ==========================================
+         [ POPUPS, MODALS & SYSTEM OVERLAYS ]
+         ========================================== -->
+    <!-- Dynamic Description Modal -->
     <div id="detailsModal" class="modal-overlay">
         <div class="modal-content" id="modal-content"></div>
     </div>
 
-    <!-- Legal Sub-Modal Systems (Privacy & Terms) -->
+    <!-- Legal Sub-Modals (Privacy & Terms) -->
     <div id="legalModal" class="modal-overlay" onclick="closeLegalModal()">
         <div class="modal-content" style="text-align: left; max-width: 600px;" onclick="event.stopPropagation()">
             <span style="float:right; cursor:pointer; color:#d4af37; font-size:2rem;" onclick="closeLegalModal()">&times;</span>
@@ -157,6 +168,7 @@
         </div>
     </div>
 
+    <!-- Thank You Checkout Success Popup -->
     <div id="thankYouOverlay">
         <div style="background: #111; border: 2px solid var(--gold); padding: 30px; border-radius: 20px; text-align: center;">
             <h2 style="font-family:'Cinzel'; color:var(--gold);">THANK YOU!</h2>
@@ -166,6 +178,10 @@
         </div>
     </div>
 
+
+    <!-- ==========================================
+         [ MAIN BRAND HEADER ]
+         ========================================== -->
     <header id="mainHeader" class="header-container header-front">
         <img src="images/LOGO.png" alt="Logo" class="main-logo">
         <div class="text-container">
@@ -174,6 +190,10 @@
         </div>
     </header>
 
+
+    <!-- ==========================================
+         [ NAVIGATION COMPONENT ]
+         ========================================== -->
     <nav class="nav-bar">
         <button onclick="showSection('home')" class="nav-btn">HOME</button>
         <button onclick="showSection('exclusive')" class="nav-btn" style="color:#fff; border-color:#fff;">🌙 OFFERS</button>
@@ -184,70 +204,178 @@
         <button onclick="toggleCart()" class="nav-btn"><i class="fas fa-shopping-cart"></i> (<span id="cart-count">0</span>)</button>
     </nav>
 
+
+    <!-- ==========================================
+         [ 1. HOME SECTION (With Categories & Floating Video Cards) ]
+         ========================================== -->
     <div id="home" class="content-section">
         <div class="welcome-box">
             <div class="royal-line"></div>
             <h2 class="embossed-text">Welcome To STORE</h2>
             <div class="royal-line"></div>
             
+            <!-- Category Navigation Cards -->
             <div class="floating-container">
-                <div class="floating-card">
-                    <img src="images/NEW ATTAR 2.png" alt="Pure Attar">
+                <div class="floating-card" onclick="showSection('attars')">
+                    <video autoplay muted loop playsinline>
+                        <source src="images/attar1.mp4" type="video/mp4">
+                    </video>
                     <p>Pure Attars</p>
                 </div>
-                <div class="floating-card">
-                    <img src="images/ALL.jpeg" alt="Luxury Perfume">
+                <div class="floating-card" onclick="showSection('perfumes')">
+                    <video autoplay muted loop playsinline>
+                        <source src="images/PERFUME.mp4" type="video/mp4">
+                    </video>
                     <p>Perfumes</p>
                 </div>
-                <div class="floating-card">
-                    <img src="images/o.jpg" alt="Pocket Spray">
+                <div class="floating-card" onclick="showSection('pocket')">
+                    <video autoplay muted loop playsinline>
+                        <source src="images/POCKET.mp4" type="video/mp4">
+                    </video>
                     <p>Pocket Sprays</p>
+                </div>
+            </div>
+
+            <!-- OUR BEST ATTARS -->
+            <h3 style="color: var(--gold); font-family: 'Cinzel'; margin-top: 45px; font-size: clamp(1.1rem, 3vw, 1.8rem); letter-spacing: 2px; margin-bottom: 5px;">OUR BEST ATTARS</h3>
+            <div class="floating-container" style="margin-top: 15px;">
+                <div class="floating-card" onclick="showSection('attars')">
+                    <video autoplay muted loop playsinline>
+                        <source src="images/attar.mp4" type="video/mp4">
+                    </video>
+                    <p>White Oud</p>
+                </div>
+                <div class="floating-card" onclick="showSection('attars')">
+                    <video autoplay muted loop playsinline>
+                        <source src="images/attar.mp4" type="video/mp4">
+                    </video>
+                    <p>Marj</p>
+                </div>
+                <div class="floating-card" onclick="showSection('attars')">
+                    <video autoplay muted loop playsinline>
+                        <source src="images/attar.mp4" type="video/mp4">
+                    </video>
+                    <p>Brute</p>
+                </div>
+            </div>
+
+            <!-- OUR BEST PERFUMES -->
+            <h3 style="color: var(--gold); font-family: 'Cinzel'; margin-top: 45px; font-size: clamp(1.1rem, 3vw, 1.8rem); letter-spacing: 2px; margin-bottom: 5px;">OUR BEST PERFUMES</h3>
+            <div class="floating-container" style="margin-top: 15px;">
+                <div class="floating-card" onclick="showSection('perfumes')">
+                    <video autoplay muted loop playsinline>
+                        <source src="images/ROSE.mp4" type="video/mp4">
+                    </video>
+                    <p>Fresh Rose</p>
+                </div>
+                <div class="floating-card" onclick="showSection('perfumes')">
+                    <video autoplay muted loop playsinline>
+                        <source src="images/SILVA.mp4" type="video/mp4">
+                    </video>
+                    <p>Silva</p>
+                </div>
+                <div class="floating-card" onclick="showSection('perfumes')">
+                    <video autoplay muted loop playsinline>
+                        <source src="images/PURPLE.mp4" type="video/mp4">
+                    </video>
+                    <p>Crystal Purple</p>
+                </div>
+            </div>
+
+            <!-- OUR BEST POCKET SPRAYS -->
+            <h3 style="color: var(--gold); font-family: 'Cinzel'; margin-top: 45px; font-size: clamp(1.1rem, 3vw, 1.8rem); letter-spacing: 2px; margin-bottom: 5px;">OUR BEST POCKET SPRAYS</h3>
+            <div class="floating-container" style="margin-top: 15px;">
+                <div class="floating-card" onclick="showSection('pocket')">
+                    <video autoplay muted loop playsinline>
+                        <source src="images/pocket.mp4" type="video/mp4">
+                    </video>
+                    <p>Pocket White Oud</p>
+                </div>
+                <div class="floating-card" onclick="showSection('pocket')">
+                    <video autoplay muted loop playsinline>
+                        <source src="images/pocket.mp4" type="video/mp4">
+                    </video>
+                    <p>Pocket Marj</p>
+                </div>
+                <div class="floating-card" onclick="showSection('pocket')">
+                    <video autoplay muted loop playsinline>
+                        <source src="images/pocket.mp4" type="video/mp4">
+                    </video>
+                    <p>Pocket Brute</p>
                 </div>
             </div>
         </div>
     </div>
 
+
+    <!-- ==========================================
+         [ 2. EXCLUSIVE OFFERS SECTION ]
+         ========================================== -->
     <div id="exclusive" class="content-section" style="display:none;">
         <h2 style="text-align:center; color:var(--gold); font-family:'Cinzel'; padding-top:20px;">ENJOY EXCLUSIVE OFFERS</h2>
         <div class="product-grid" id="exclusive-grid"></div>
     </div>
 
+
+    <!-- ==========================================
+         [ 3. ATTARS DISPLAY SECTION ]
+         ========================================== -->
     <div id="attars" class="content-section" style="display:none;">
         <h2 style="text-align:center; color:var(--gold); font-family:'Cinzel'; padding-top:20px;">ATTAR COLLECTION</h2>
         <div class="product-grid" id="attar-grid"></div>
     </div>
 
+
+    <!-- ==========================================
+         [ 4. PERFUMES DISPLAY SECTION ]
+         ========================================== -->
     <div id="perfumes" class="content-section" style="display:none;">
         <h2 style="text-align:center; color:var(--gold); font-family:'Cinzel'; padding-top:20px;">LUXURY PERFUMES</h2>
         <div class="product-grid" id="perfume-grid"></div>
     </div>
 
+
+    <!-- ==========================================
+         [ 5. POCKET SPRAYS DISPLAY SECTION ]
+         ========================================== -->
     <div id="pocket" class="content-section" style="display:none;">
         <h2 style="text-align:center; color:var(--gold); font-family:'Cinzel'; padding-top:20px;">POCKET PERFUMES</h2>
         <div class="product-grid" id="pocket-grid"></div>
     </div>
 
+
+    <!-- ==========================================
+         [ 6. WISHLIST / LIKED SECTION ]
+         ========================================== -->
     <div id="liked" class="content-section" style="display:none;">
         <h2 style="text-align:center; color:var(--gold); font-family:'Cinzel'; padding-top:20px;">YOUR LIKED ITEMS</h2>
         <div class="product-grid" id="liked-grid"></div>
         <p id="liked-empty" style="text-align:center; color:#666; margin-top:50px;">No items liked yet.</p>
     </div>
 
+
+    <!-- ==========================================
+         [ 7. SHOPPING CART SIDEBAR ]
+         ========================================== -->
     <div id="cartSidebar" class="cart-sidebar">
         <h2 style="color:var(--gold); font-family:'Cinzel';">Your Cart</h2>
         <div id="cart-list"></div>
         
+        <!-- Cart Calculations and Total -->
         <div style="border-top:1px solid #333; padding-top:10px; margin-top:10px;">
             <p style="font-size:0.9rem;">🛵 Delivery: <span id="dc-amount">Rs. 299</span></p>
             <p id="free-note" style="color:var(--gold); font-size:0.7rem;"></p>
             <p style="font-size:1.1rem; font-weight:bold;">Total: <span id="total-price" style="color:var(--gold)">Rs. 0</span></p>
         </div>
 
+        <!-- Coupon Management -->
         <div style="margin-top:10px; display:flex; gap:5px;">
             <input type="text" id="promo-input" class="input-field" placeholder="Promo Code" style="margin-bottom:0; flex:1;">
             <button onclick="applyPromo()" style="background:var(--gold); color:black; border:none; padding:0 10px; font-weight:bold; cursor:pointer; border-radius:4px;">APPLY</button>
         </div>
         <p id="promo-msg" style="font-size:0.7rem; margin:5px 0 0 5px; font-weight:bold;"></p>
+        
+        <!-- Customer Details Fields -->
         <input type="text" id="custName" class="input-field" placeholder="Full Name" style="margin-top:15px;">
         <input type="tel" id="custWhatsApp" class="input-field" placeholder="WhatsApp Number">
         <textarea id="custAddress" class="input-field" placeholder="Full Address"></textarea>
@@ -256,21 +384,82 @@
         <button class="nav-btn" style="width:100%; margin-top:10px;" onclick="toggleCart()">CLOSE</button>
     </div>
 
+
+    <!-- ==========================================
+         [ 8. EXPANDABLE RESPONSIVE FOOTER ]
+         ========================================== -->
+    <footer class="footer">
+        <div class="footer-container">
+            
+            <!-- Brand Overview -->
+            <div class="footer-row">
+                <h3>AL SAQIB ATTAR & PERFUMES</h3>
+                <p>We are dedicated to bringing you premium and long-lasting fragrances. Order your favorite scent online from Al Saqib Store.</p>
+                <div class="social-icons">
+                    <a href="#"><i class=></i></a>
+                    <a href="#"><i class=></i></a>
+                    <a href="#"><i class=></i></a>
+                </div>
+            </div>
+
+            <!-- Quick Links Navigation -->
+            <div class="footer-row">
+                <h3>QUICK LINKS</h3>
+                <ul>
+                    <li><a href="#" onclick="showSection('home'); return false;">Home</a></li>
+                    <li><a href="#" onclick="showSection('exclusive'); return false;">Special Offers</a></li>
+                    <li><a href="#" onclick="showSection('attars'); return false;">Attars</a></li>
+                    <li><a href="#" onclick="showSection('perfumes'); return false;">Perfumes</a></li>
+                    <li><a href="#" onclick="showSection('pocket'); return false;">Pocket Sprays</a></li>
+                </ul>
+            </div>
+
+            <!-- Legal Documents -->
+            <div class="footer-row">
+                <h3>LEGAL PAGES</h3>
+                <ul>
+                    <li><a href="#" onclick="openLegalModal('privacy'); return false;">Privacy Policy</a></li>
+                    <li><a href="#" onclick="openLegalModal('terms'); return false;">Terms & Conditions</a></li>
+                </ul>
+            </div>
+
+            <!-- Store Location Contact Info -->
+            <div class="footer-row">
+                <h3>CONTACT INFO</h3>
+                <p><i class="fas fa-map-marker-alt"></i> Karachi, Pakistan</p>
+                <p><i class="fas fa-phone"></i> +92 335 3397893</p>
+                <p><i class="fas fa-phone"></i> +92 3162533193</p>
+                <p><i class="fas fa-phone"></i> +92 3202103037</p>
+                <p><i class="fas fa-envelope"></i> alsaqibattarsperfumes@gmail.com</p>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>&copy; 2026 AL SAQIB ATTARS & PERFUMES. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+
+    <!-- ==========================================
+         [ JAVASCRIPT MOTORS & SYSTEMS ]
+         ========================================== -->
     <script>
     let cart = [];
     let likedIds = [];
     let freebieTriggered = false;
     let discountPercent = 0; 
 
+    // Image Swap Mapping for 50ml Variants
     const img50mlMap = {
         101: "images/TT.jpg", 102: "images/Gemini_Generated_Image_44ix4p44ix4p44ix.png", 103: "images/Gemini_Generated_Image_lgn9lklgn9lklgn9.png",     
-        104: "images/TT.jpg", 105: "images/Gemini_Generated_Image_44ix4p44ix4p44ix.png", 106: "images/Gemini_Generated_Image_44ix4p44ix4p44ix.png",     
+        104: "images/TT.jpg", 105: "images/Gemini_Generated_Image_44ix4p44ix4p44ix.png", 106: "images/TT.jpg",     
         107: "images/Gemini_Generated_Image_44ix4p44ix4p44ix.png", 108: "images/Gemini_Generated_Image_44ix4p44ix4p44ix.png", 109: "images/Gemini_Generated_Image_44ix4p44ix4p44ix.png",     
         110: "images/Gemini_Generated_Image_44ix4p44ix4p44ix.png", 111: "images/Gemini_Generated_Image_44ix4p44ix4p44ix.png", 112: "images/TT.jpg",     
         113: "images/Gemini_Generated_Image_u9a0uvu9a0uvu9a0.png", 114: "images/Gemini_Generated_Image_44ix4p44ix4p44ix.png", 115: "images/P.jpg",     
         116: "images/Gemini_Generated_Image_44ix4p44ix4p44ix.png"      
     };
 
+    // Product Master Database Arrays
     const products = [
         // ===== ATTARS =====
         {id:1, name:"White Oud <br> BY AL SAQIB", img:"images/NEW ATTAR 2.png", type:"attar", p3:299, p6:499, p12:949, desc: "A royal and woody luxury scent."},
@@ -278,7 +467,7 @@
         {id:3, name:"BRUTE <br> BY AL SAQIB", img:"images/NEW ATTAR 2.png", type:"attar", p3:299, p6:499, p12:949, desc: "Strong masculine scent for brave souls."},
         {id:4, name:"ERBA PURA <br> BY AL SAQIB", img:"images/NEW ATTAR 2.png", type:"attar", p3:299, p6:499, p12:949, desc: "Exotic fruits in a sweet blend."},
         {id:5, name:"AXE BLACK <br> BY AL SAQIB", img:"images/NEW ATTAR 2.png", type:"attar", p3:299, p6:499, p12:949, desc: "Dark, cool, and magnetic aroma."},
-        {id:50, name:"SILVA <br> BY AL SAQIB", img:"images/NEW ATTAR 2.png", type:"attar", p3:299, p6:499, p12:949, desc: "Sharp energy for a fresh day."},
+       {id:50, name:"SILVA <br> BY AL SAQIB", img:"images/NEW ATTAR 2.png", type:"attar", p3:299, p6:499, p12:949, desc: "Sharp energy for a fresh day."},
         {id:6, name:"CLIMATE <br> BY AL SAQIB", img:"images/NEW ATTAR 2.png", type:"attar", p3:249, p6:449, p12:849, desc: "Natural calming scent of green fields."},
         {id:7, name:"DELICIA <br> BY AL SAQIB", img:"images/NEW ATTAR 2.png", type:"attar", p3:249, p6:449, p12:849, desc: "Divine creamy sweetness in every drop."}, 
         {id:8, name:"SUPREME OUD <br> BY AL SAQIB", img:"images/NEW ATTAR 2.png", type:"attar", p3:299, p6:449, p12:849, desc: "Intense oriental oud for deep souls."},
@@ -325,12 +514,13 @@
         {id:215, name:"POCKET CRYSTAL PURPLE <br> BY AL SAQIB", img:"images/B (2).png", type:"pocket", p:299, desc: "Sweet royal purple floral essence."},
         {id:216, name:"POCKET ETERNITY <br> BY AL SAQIB", img:"images/o.jpg", type:"pocket", p:299, desc: "Timeless fresh premium tracking spray."},
 
-        // ===== SPECIAL ATTAR OFFERS =====
+        // ===== SPECIAL DEALS BUNDLES =====
         {id:43, name:"EID BUNDLE (1)<br> 3 Ml ATTARS ", img:"images/OFFER 3.png", type:"exclusive", size:"3ml", desc: "Pick any 3 fragrances in 3ml size."},
         {id:44, name:"EID BUNDLE (2)<br> 6 Ml ATTARS ", img:"images/OFFER 6.png", type:"exclusive", size:"6ml", desc: "Pick any 3 fragrances in 6ml size."},
         {id:45, name:"EID BUNDLE (3)<br> 12 Ml ATTARS", img:"images/OFFER 12.png", type:"exclusive", size:"12ml", desc: "Pick any 3 fragrances in 12ml size."}
     ];
 
+    // Fragrances Checklist Master Definition
     const fragranceList = [
         {name: "White Oud", cat: "premium"}, {name: "Marj", cat: "premium"},
         {name: "Brute", cat: "premium"}, {name: "Erba Pura", cat: "premium"},
@@ -342,12 +532,12 @@
         {name: "Crystal Purple", cat: "regular"}, {name: "Eternity", cat: "regular"}
     ];  
 
-    // Dynamic Promo Codes Object - Standardized 5% Flat Discount
     const promoCodes = {
         "124421-10505": 5, "PREMIUM-15454": 5, "ATTAR-2026": 5,
         "FRAGRANCE-51947": 5, "POCKET-2009": 5, "ALSAQIB-3000": 5, "EID OFFER-2026": 5
     };
 
+    // UI Toast Notifications Motor
     function showNotify(msg) {
         let n = document.createElement('div');
         n.style.cssText = "position:fixed; top:20px; right:20px; background:linear-gradient(145deg, #1a1a1a, #000); color:#d4af37; padding:15px 25px; border:1px solid #d4af37; border-radius:8px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); z-index:10000; font-family:'Cinzel', serif; font-size:0.8rem; border-left:5px solid #d4af37;";
@@ -356,6 +546,7 @@
         setTimeout(() => n.remove(), 3000);
     }
 
+    // Dynamic Engine for Flipping Bottle Graphics
     function handleImageSwap(id, size, elementId = null) {
         const targetId = elementId ? elementId : `prod-img-${id}`;
         const imgElement = document.getElementById(targetId);
@@ -369,8 +560,11 @@
         }
     }
 
+    // Dynamic Card Assembly Engine (Using Clean Layout Rendering)
     function createCard(p) {
-        const isLiked = likedIds.includes(p.id) ? 'liked' : '';
+        const isLiked = likedIds.includes(p.id);
+        const likedClass = isLiked ? 'active-liked' : '';
+        
         let options = "";
         let badge = (p.type === 'exclusive') ? `<div class="badge-new">15% OFF</div>` : "";
 
@@ -391,15 +585,19 @@
             </div>`;
         }
 
+        let mediaHTML = `<img src="${p.img}" alt="${p.name}" id="prod-img-${p.id}">`;
+
         return `
         <div class="card">
             ${badge}
-            <div class="img-container" onclick="showDetails(${p.id})">
-                <img src="${p.img}" alt="${p.name}" id="prod-img-${p.id}">
+            <div class="img-container" id="media-container-${p.id}" onclick="showDetails(${p.id})">
+                ${mediaHTML}
             </div>
             <h4>${p.name}</h4>
             ${options}
-            <i class="fas fa-heart like-icon ${isLiked}" onclick="toggleLike(${p.id})"></i>
+            <div class="like-container ${likedClass}" onclick="toggleLike(${p.id})">
+                <span class="custom-heart">&#9829;</span>
+            </div>
             <button class="add-btn" onclick="showDetails(${p.id})">
                 ${p.type === 'exclusive' ? 'SELECT FRAGRANCES' : 'ADD TO CART'}
             </button>
@@ -407,6 +605,7 @@
         </div>`;
     }
 
+    // Modal Details Renderer
     function showDetails(id) {
         const p = products.find(x => x.id === id);
         const content = document.getElementById('modal-content');
@@ -442,9 +641,11 @@
                 </div>`;
         }
 
+        let modalMediaHTML = `<img src="${p.img}" id="modal-img" style="height:140px; border-radius:10px; object-fit:contain;">`;
+
         content.innerHTML = `
             <span style="float:right; cursor:pointer; color:#d4af37; font-size:2rem;" onclick="closeModal()">&times;</span>
-            <div style="text-align:center;"><img src="${p.img}" id="modal-img" style="height:140px; border-radius:10px; object-fit:contain;"></div>
+            <div style="text-align:center;">${modalMediaHTML}</div>
             <h2 style="color:#d4af37; text-align:center; font-family:'Cinzel'; margin:5px 0; font-size:1.2rem;">${p.name}</h2>
             ${descriptionHTML} ${selectionHTML}
             <button class="add-btn" style="width:100%; margin-top:10px; padding:12px; font-weight:bold;" onclick="modalAdd(${p.id})">
@@ -453,6 +654,7 @@
         document.getElementById('detailsModal').style.display = 'flex';
     }
 
+    // Bundle Checkbox Limit Controller
     function handleSelection(limit) {
         const checked = document.querySelectorAll('.offer-check:checked');
         const all = document.querySelectorAll('.offer-check');
@@ -473,6 +675,7 @@
         }
     }
 
+    // Processing Selected Items Into Global Cart
     function modalAdd(id) {
         const p = products.find(x => x.id === id);
         let item = {};
@@ -503,6 +706,7 @@
         showNotify(`${item.name.split(':')[0].replace(/<br>/gi, '')} added!`);
     }
 
+    // Mathematical Cart Calculator Engine
     function updateCart() {
         if(document.getElementById('cart-count')) document.getElementById('cart-count').innerText = cart.length;
         let sub = cart.reduce((s, i) => s + i.price, 0);
@@ -532,6 +736,7 @@
     function toggleCart() { document.getElementById('cartSidebar').classList.toggle('open'); }
     function closeModal() { document.getElementById('detailsModal').style.display = 'none'; }
 
+    // Privacy & Terms Modal Controller
     function openLegalModal(type) {
         const title = document.getElementById('legalTitle');
         const text = document.getElementById('legalText');
@@ -547,6 +752,7 @@
     document.addEventListener('click', function(e){ if(e.target.classList.contains('modal-overlay')) closeModal(); });
     function closeLegalModal() { document.getElementById('legalModal').style.display = 'none'; }
 
+    // Core Template Catalog Loops
     function renderProducts() {
         ['attar', 'perfume', 'pocket', 'exclusive'].forEach(type => {
             const grid = document.getElementById(type + "-grid");
@@ -557,6 +763,7 @@
         });
     }
 
+    // Pure Layout Like Handler
     function toggleLike(id) {
         likedIds.includes(id) ? likedIds = likedIds.filter(i => i !== id) : likedIds.push(id);
         renderProducts();
@@ -574,13 +781,18 @@
         } else { emptyMsg.style.display = 'block'; }
     }
 
+    // View Routing Core Framework
     function showSection(id) {
         document.querySelectorAll('.content-section').forEach(s => s.style.display = 'none');
-        document.getElementById(id).style.display = 'block';
-        document.getElementById('mainHeader').className = (id==='home') ? 'header-container header-front' : 'header-container header-inner';
-        window.scrollTo(0,0);
+        const targetSection = document.getElementById(id);
+        if(targetSection) {
+            targetSection.style.display = 'block';
+            document.getElementById('mainHeader').className = (id==='home') ? 'header-container header-front' : 'header-container header-inner';
+            targetSection.scrollIntoView({ behavior: 'smooth' });
+        }
     }
 
+    // Coupon Calculations System
     function applyPromo() {
         const inputField = document.getElementById('promo-input');
         const msg = document.getElementById('promo-msg');
@@ -599,6 +811,7 @@
         }
     }
 
+    // WhatsApp Dispatcher Gateway
     function checkoutWhatsApp() {
         const n = document.getElementById('custName').value, w = document.getElementById('custWhatsApp').value, a = document.getElementById('custAddress').value;
         if(!n || !w || !a || cart.length === 0) return alert("Please fill all details!");
@@ -618,47 +831,15 @@
         document.getElementById('thankYouOverlay').style.display = 'none'; cart = []; updateCart(); toggleCart(); showSection('home');
     }
 
+    // Mobile Dynamic Accordion Footer Engine
     function initExpandableFooter() {
         document.querySelectorAll('.footer-row h3').forEach(heading => {
             heading.addEventListener('click', () => { if (window.innerWidth <= 768) heading.parentElement.classList.toggle('active'); });
         });
     }
 
+    // Global Boot Master Engine
     window.onload = function() { renderProducts(); initExpandableFooter(); };
 </script>
-
-<footer class="footer">
-    <div class="footer-container">
-        <div class="footer-row">
-            <h3>AL SAQIB ATTAR & PERFUMES</h3>
-            <p>We are dedicated to bringing you premium and long-lasting fragrances. Order your favorite scent online from Al Saqib Store.</p>
-            <div class="social-icons">
-                <a href="#"><i class="fab fa-facebook"></i></a><a href="#"><i class="fab fa-instagram"></i></a><a href="#"><i class="fab fa-whatsapp"></i></a>
-            </div>
-        </div>
-        <div class="footer-row">
-            <h3>Quick Links</h3>
-            <ul>
-                <li><a href="#" onclick="showSection('home'); return false;">Home</a></li>
-                <li><a href="#" onclick="showSection('exclusive'); return false;">Special Offers</a></li>
-                <li><a href="#" onclick="showSection('attars'); return false;">Attars</a></li>
-                <li><a href="#" onclick="showSection('perfumes'); return false;">Perfumes</a></li>
-            </ul>
-        </div>
-        <div class="footer-row">
-            <h3>Legal Pages</h3>
-            <ul>
-                <li><a href="#" onclick="openLegalModal('privacy'); return false;">Privacy Policy</a></li>
-                <li><a href="#" onclick="openLegalModal('terms'); return false;">Terms & Conditions</a></li>
-            </ul>
-        </div>
-        <div class="footer-row">
-            <h3>Contact Info</h3>
-            <p><i class="fas fa-map-marker-alt"></i> Karachi, Pakistan</p>
-            <p><i class="fas fa-phone"></i> +92 335 3397893</p>
-        </div>
-    </div>
-    <div class="footer-bottom"><p>&copy; 2026 Al Saqib Premium Store. All Rights Reserved.</p></div>
-</footer>
 </body>
 </html>
